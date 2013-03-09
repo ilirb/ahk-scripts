@@ -21,40 +21,36 @@ In \Commands folder all files with underscore are my additions you can check the
 For some functions like uTorrent and PSExec to work you need to create another ahk file one folder above the current folder (..\Vars.ahk)
 
 Example Vars.ahk:
-uTorrentIP = 192.168.1.1
-uTorrentPort = 8080
-uTorUser = admin
-uTorPass = someutorrentpass
-;=======Sysinternals
-SysInternals = D:\Install\SysinternalsSuite
-RemoteComputer = 192.168.1.1
-PsExecUser = windowsuser
-PsExecPass = windowsuserpassword
-ConnectVPN = Rasdial vpn_interface user password
-
+    uTorrentIP = 192.168.1.1
+    uTorrentPort = 8080
+    uTorUser = admin
+    uTorPass = someutorrentpass
+    ;=======Sysinternals
+    SysInternals = D:\Install\SysinternalsSuite
+    RemoteComputer = 192.168.1.1
+    PsExecUser = windowsuser
+    PsExecPass = windowsuserpassword
+    ConnectVPN = Rasdial vpn_interface user password
 
 Functions
 =========
 Custom Functions
 
-OpenConsole
+* OpenConsole - 
 Will open CMD in the current folder opened in Windows Explorer
 
-NewTextFile
+* NewTextFile - 
 You like Ctrl+Shift+N to create a new folder in Windows 7? Use Ctrl+Shift+T to create a new text file in current folder.
 
-uTorrentWebUI
+* uTorrentWebUI - 
 Remote control uTorrent running in another machine. Stop, start, pause, unpause, etc...
 
-ConnectVPNRemote
+* ConnectVPNRemote - 
 Start VPN connection on the remote machine
 
-PSExecWArgs
-Execute commands in remote computer using PSExec using dialog input.
+* PSExecWArgs - Execute commands in remote computer using PSExec using dialog input.
 
-GoogleMusicControl
-Simple Google Play Music control start, pause, next, previous. (Opened in Chrome only, for now)
+* GoogleMusicControl - Simple Google Play Music control start, pause, next, previous. (Opened in Chrome only, for now)
 
-LoopChromeTabs
-Go through all opened tabs and find a certain tab in Chrome
+* LoopChromeTabs - Go through all opened tabs and find a certain tab in Chrome
 
