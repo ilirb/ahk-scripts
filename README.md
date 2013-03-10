@@ -23,23 +23,27 @@ For some functions like uTorrent and PSExec to work you need to create another a
 
 Example Vars.ahk:
 
+    ; uTorrent
     uTorrentIP = 192.168.1.1
     uTorrentPort = 8080
     uTorUser = admin
     uTorPass = someutorrentpass
-    ;=======Sysinternals
+    
+    ; Tools & The Others
     SysInternals = D:\Install\SysinternalsSuite
+    NirSoft = D:\Install\NirSoft
     RemoteComputer = 192.168.1.1
     PsExecUser = windowsuser
     PsExecPass = windowsuserpassword
     ConnectVPN = Rasdial vpn_interface user password
+    MacList = HomePc|00-11-22-33-44-55,RaspberryPi|00-11-22-33-44-55
 
 Functions
 ---------
 Custom Functions
 
 * **OpenConsole** - 
-Will open CMD in the current folder opened in Windows Explorer
+Will open CMD in the current folder opened in Windows Explorer.
 
 * **NewTextFile** - 
 You like build-in `Ctrl+Shift+N` to create a new folder in Windows 7? Use `Ctrl+Shift+T` to create a new text file in current folder.
@@ -48,10 +52,12 @@ You like build-in `Ctrl+Shift+N` to create a new folder in Windows 7? Use `Ctrl+
 Remote control uTorrent running in another machine. Stop, start, pause, unpause, etc...
 
 * **ConnectVPNRemote** - 
-Start VPN connection on the remote machine
+Start VPN connection on the remote machine.
 
 * **PSExecWArgs** - Execute commands in remote computer using PSExec using dialog input.
 
 * **GoogleMusicControl** - Simple Google Play Music control start, pause, next, previous. (Opened in Chrome only, for now)
 
-* **LoopChromeTabs** - Go through all opened tabs and find a certain tab in Chrome
+* **LoopChromeTabs** - Go through all opened tabs and find a certain tab in Chrome.
+
+* **WakeOnLan** - Put all your machines in a list and wake 'em up remotely each one separately.
