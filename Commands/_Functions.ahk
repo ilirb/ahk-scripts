@@ -170,6 +170,10 @@ PSexecWArgs()
 	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %Arguments% 
 }
 ;========================================================================================
+; WIP
+;
+; This is ugly, can we have some makeup?
+
 AddCommand("GoogleMusicControl", "Ctrl+Alt - Space for play/pause, Left for previous and Right for next")
 GoogleMusicControl(SendKey)
 {
@@ -241,3 +245,17 @@ Winscp()
 	{
 		Run, D:\Portable\PortableApps\WinSCP\winscp422.exe
 	}
+;========================================================================================	
+; Wake On Lan 
+; MacList variable is defined in my ..\Vars.ahk files in the following format
+; HomePc|00-11-22-33-44-55,RaspberryPi|00-11-22-33-44-55
+; Requires WakeMeOnLan from NirSoft. Of course you can use another app just figure out the cmd parameters and change the function
+
+global MacList
+AddCommand("WakeOnLan", "Wake On Lan with parameters", MacList)
+WakeOnLan(WOLList = "")
+{
+	Global NirSoft, MacList
+	Run, %NirSoft%\WakeMeOnLan.exe /wakeup %WOLList%
+	MsgBox Trying to wake: %WOLList%
+}
