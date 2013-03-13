@@ -25,8 +25,10 @@ OpenConsole2()
     IfInString full_path, \
     {
 		; This will run a custom cmd called Console2 if you want to use the regular one use the 2nd line instead
-        Run, %A_WorkingDir%\..\..\Tools\Console-2.00b148-Beta_32bit\Console.exe -d "%full_path%"
-        ;~ Run,  cmd /K cd /D "%full_path%"
+		IfExist, %A_WorkingDir%\..\..\Tools\Console-2.00b148-Beta_32bit\Console.exe
+			Run, %A_WorkingDir%\..\..\Tools\Console-2.00b148-Beta_32bit\Console.exe -d "%full_path%"
+		else
+			Run,  cmd /K cd /D "%full_path%"
     }
     else
     {
@@ -122,8 +124,7 @@ OpenCmdInCurrent()
 
 uTorrentWebUI(ActionToPerform)
 {
-	global uTorUser, uTorPass, uTorrentIP, uTorrentPort
-	
+	; Define these variables uTorUser, uTorPass, uTorrentIP, uTorrentPort
 	; Get list of torrents
 	URLDownloadToFile, http://%uTorUser%:%uTorPass%@%uTorrentIP%:%uTorrentPort%/gui/?list=1, %A_ScriptDir%\list.txt
 	
@@ -157,7 +158,7 @@ uTorrentWebUI(ActionToPerform)
 AddCommand("ConnectVPNRemote", "Start VPN connection on remote computer - CTRL-Alt-V")
 ConnectVPNRemote()
 {
-	global SysInternals, RemoteComputer, PsExecUser, PsExecPass, ConnectVPN
+	; Define these variables SysInternals, RemoteComputer, PsExecUser, PsExecPass, ConnectVPN
 	; ConnectVPN is a cmd: Rasdial vpn_name user pass
 	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %ConnectVPN% 
 }
@@ -165,7 +166,6 @@ ConnectVPNRemote()
 AddCommand("PSexecWArgs", "Enter argument to exec psexec on remote computer - CTRL-Alt-R")
 PSexecWArgs()
 {
-	global SysInternals, RemoteComputer, PsExecUser, PsExecPass, Arguments
 	InputBox, Arguments
 	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %Arguments% 
 }
@@ -245,17 +245,22 @@ Winscp()
 	{
 		Run, D:\Portable\PortableApps\WinSCP\winscp422.exe
 	}
+	
+AddCommand("ProcExp", "Open Process Explorer from SysInternals")
+ProcExp()
+	{
+		
+		Run, %SysInternals%\procexp.exe
+	}
 ;========================================================================================	
 ; Wake On Lan 
 ; MacList variable is defined in my ..\Vars.ahk files in the following format
 ; HomePc|00-11-22-33-44-55,RaspberryPi|00-11-22-33-44-55
 ; Requires WakeMeOnLan from NirSoft. Of course you can use another app just figure out the cmd parameters and change the function
 
-global MacList
 AddCommand("WakeOnLan", "Wake On Lan with parameters", MacList)
 WakeOnLan(WOLList = "")
 {
-	Global NirSoft, MacList
 	Run, %NirSoft%\WakeMeOnLan.exe /wakeup %WOLList%
 	MsgBox Trying to wake: %WOLList%
 }
