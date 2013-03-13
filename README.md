@@ -24,19 +24,19 @@ For some functions like uTorrent and PSExec to work you need to create another a
 Example Vars.ahk:
 
     ; uTorrent
-    uTorrentIP = 192.168.1.1
-    uTorrentPort = 8080
-    uTorUser = admin
-    uTorPass = someutorrentpass
+    global uTorrentIP := "192.168.1.1"
+    global uTorrentPort := "8080"
+    global uTorUser := "admin"
+    global uTorPass := "someutorrentpass"
     
     ; Tools & The Others
-    SysInternals = D:\Install\SysinternalsSuite
-    NirSoft = D:\Install\NirSoft
-    RemoteComputer = 192.168.1.1
-    PsExecUser = windowsuser
-    PsExecPass = windowsuserpassword
-    ConnectVPN = Rasdial vpn_interface user password
-    MacList = HomePc|00-11-22-33-44-55,RaspberryPi|00-11-22-33-44-55
+    global SysInternals := "D:\Install\SysinternalsSuite"
+    global NirSoft := "D:\Install\NirLauncher\NirSoft"
+    global RemoteComputer := "192.168.1.1"
+    global PsExecUser := "windowsuser"
+    global PsExecPass := "windowsuserpassword"
+    global ConnectVPN := "Rasdial vpn_interface user password"
+    global MacList := "HomePc|00-11-22-33-44-55,RaspberryPi|00-11-22-33-44-55"
 
 Functions
 ---------
