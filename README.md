@@ -1,7 +1,7 @@
 ahk-scripts
 ===========
 
-Different AHK scripts (also included in AHK Command Picker) 
+Different AHK scripts (also included in AHK Command Picker) and few compiled standalone EXE's (without AutoHotKey)
 
 What's in here
 --------------
@@ -12,6 +12,8 @@ It's pretty much unmodified so i strongly recommend you to read doc @ http://ahk
 
 
 Besides AHK CmdPicker's general shortcuts/hotkeys i have included my own Functions and shortcuts which are suited to me so if you want to use everything you will have to adjust them for your needs.
+
+Next are `Executables` which are basically exe files and you can run them without having AutoHotKey installed. Should come in handy when you want these scripts but cannot install AHK. I have also included `source` for all those exe's incase you wonder what's inside or want to improve.
 
 How To
 ------
@@ -37,6 +39,8 @@ Example Vars.ahk:
     global PsExecPass := "windowsuserpassword"
     global ConnectVPN := "Rasdial vpn_interface user password"
     global MacList := "HomePc|00-11-22-33-44-55,RaspberryPi|00-11-22-33-44-55"
+    
+For `EXE`'s just run them and you'll get a msgbox with instructions.
 
 Functions
 ---------
