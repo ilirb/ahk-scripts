@@ -163,6 +163,14 @@ ConnectVPNRemote()
 	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %ConnectVPN% 
 }
 
+AddCommand("CloseVPNRemote", "Close VPN connection on remote computer")
+CloseVPNRemote()
+{
+	; Define these variables SysInternals, RemoteComputer, PsExecUser, PsExecPass, CloseVPN
+	; CloseVPN is a cmd: Rasdial vpn_name /DISCONNECT
+	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %CloseVPN% 
+}
+
 AddCommand("PSexecWArgs", "Enter argument to exec psexec on remote computer - CTRL-Alt-R")
 PSexecWArgs()
 {
@@ -178,7 +186,7 @@ AddCommand("GoogleMusicControl", "Ctrl+Alt - Space for play/pause, Left for prev
 GoogleMusicControl(SendKey)
 {
 	Global TabTitleExist
-	TabTitle = My Music - Google Play
+	TabTitle = My Library - Google Play
 	SetTitleMatchMode 2
 	IfWinExist, %TabTitle%
 	{

@@ -25,7 +25,7 @@ MsgBox, 64, GoogleMusicRemote, USAGE: When Google Play Music is open in a Chrome
 GoogleMusicControl(SendKey)
 {
 	Global TabTitleExist
-	TabTitle = My Music - Google Play
+	TabTitle = My Library - Google Play
 	SetTitleMatchMode 2
 	IfWinExist, %TabTitle%
 	{
