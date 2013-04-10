@@ -38,6 +38,7 @@ Example Vars.ahk:
     global PsExecUser := "windowsuser"
     global PsExecPass := "windowsuserpassword"
     global ConnectVPN := "Rasdial vpn_interface user password"
+    global CloseVPN := "Rasdial vpn_interface /DISCONNECT"
     global MacList := "HomePc|00-11-22-33-44-55,RaspberryPi|00-11-22-33-44-55"
     
 For `EXE`'s just run them and you'll get a msgbox with instructions.
