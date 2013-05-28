@@ -260,6 +260,12 @@ ProcExp()
 		
 		Run, %SysInternals%\procexp.exe
 	}
+
+AddCommand("FileZila", "Open FileZila")
+FileZila()
+	{
+		Run, D:\Portable\PortableApps\FileZillaPortable\FileZillaPortable.exe
+	}
 ;========================================================================================	
 ; Wake On Lan 
 ; MacList variable is defined in my ..\Vars.ahk files in the following format
@@ -272,3 +278,35 @@ WakeOnLan(WOLList = "")
 	Run, %NirSoft%\WakeMeOnLan.exe /wakeup %WOLList%
 	MsgBox Trying to wake: %WOLList%
 }
+;========================================================================================	
+; XBMC Remote API using curl and JSON calls
+; To be improved for supporting many API calls
+JsonMessage = "{\"jsonrpc\":\"2.0\",\"method\":\"GUI.ShowNotification\",\"params\":{\"title\":\"Message Title\",\"message\":\"Message Body\"},\"id\":1}"
+AddParameterToString(JsonXBMC, "Reboot|test")
+AddParameterToString(JsonXBMC, "Message|%JsonMessage%")
+
+;AddCommand("XBMCScanLibrary", "XBMC Scan Library for changes", JsonXBMC)
+;XBMCScanLibrary(JsonXBMCCalls = "")
+AddCommand("XBMCScanLibrary", "XBMC Scan Library for changes")
+XBMCScanLibrary()
+	{
+		;http://%xbmcuser%:%xbmcpass%@%xbmcIP%:%xbmcJSONPort%/jsonrpc ;if you have user and pass
+		JsonScanXbmc = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Scan\", \"id\": \"mybash\"}"
+		JsonRebootXbmc = "{\"jsonrpc\": \"2.0\", \"method\": \"System.Reboot\", \"id\": \"mybash\"}"
+		JsonCleanLibXbmc = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Clean\", \"id\": \"mybash\"}"
+		Run, %curl% -i -X POST -d %JsonScanXbmc% -H "content-type:application/json" http://%xbmcIP%:%xbmcJSONPort%/jsonrpc
+	}
+	
+AddCommand("XBMCCleanLibrary", "XBMC Clean Library")
+XBMCCleanLibrary()
+	{
+		JsonCleanLibXbmc = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Clean\", \"id\": \"mybash\"}"
+		Run, %curl% -i -X POST -d %JsonCleanLibXbmc% -H "content-type:application/json" http://%xbmcIP%:%xbmcJSONPort%/jsonrpc
+	}
+	
+AddCommand("XBMCReboot", "XBMC Reboot")
+XBMCReboot()
+	{
+		JsonRebootXbmc = "{\"jsonrpc\": \"2.0\", \"method\": \"System.Reboot\", \"id\": \"mybash\"}"
+		Run, %curl% -i -X POST -d %JsonRebootXbmc% -H "content-type:application/json" http://%xbmcIP%:%xbmcJSONPort%/jsonrpc
+	}
