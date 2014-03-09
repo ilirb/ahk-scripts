@@ -21,9 +21,9 @@ OpenConsole2()
     ; Just in case - remove all carriage returns (`r)
     StringReplace, full_path, full_path, `r, , all
 
-
     IfInString full_path, \
     {
+		;Run, %A_WinDir%\system32\WindowsPowerShell\v1.0\powershell.exe -noexit -command "cd '%full_path%'"
 		; This will run a custom cmd called Console2 if you want to use the regular one use the 2nd line instead
 		IfExist, %A_WorkingDir%\..\..\Tools\Console-2.00b148-Beta_32bit\Console.exe
 			Run, %A_WorkingDir%\..\..\Tools\Console-2.00b148-Beta_32bit\Console.exe -d "%full_path%"
@@ -186,7 +186,7 @@ AddCommand("GoogleMusicControl", "Ctrl+Alt - Space for play/pause, Left for prev
 GoogleMusicControl(SendKey)
 {
 	Global TabTitleExist
-	TabTitle = My Library - Google Play
+	TabTitle = Google Play Music
 	SetTitleMatchMode 2
 	IfWinExist, %TabTitle%
 	{
@@ -236,6 +236,22 @@ LoopChromeTabs(TabTitle)
 }
 
 ;========================================================================================
+AddCommand("IPAddrs", "Show all IP addresses")
+IPAddrs()
+	{
+		MsgBox, %A_IPAddress1%`n%A_IPAddress2%`n%A_IPAddress3%`n%A_IPAddress4%
+	}
+
+AddCommand("ExternalIP", "Show External IP Address")
+ExternalIP()
+	{
+		UrlDownloadToFile, http://ip.ahk4.me/, %A_Temp%\ip.ahk4.me
+		FileRead, ExtIP, %A_Temp%\ip.ahk4.me
+		MsgBox % ExtIP
+		FileDelete,%A_Temp%\ip.ahk4.me
+		Clipboard := ExtIP	
+	}
+
 AddCommand("Kitty", "Open Kitty")
 Kitty()
 	{
@@ -285,15 +301,18 @@ JsonMessage = "{\"jsonrpc\":\"2.0\",\"method\":\"GUI.ShowNotification\",\"params
 AddParameterToString(JsonXBMC, "Reboot|test")
 AddParameterToString(JsonXBMC, "Message|%JsonMessage%")
 
-;AddCommand("XBMCScanLibrary", "XBMC Scan Library for changes", JsonXBMC)
-;XBMCScanLibrary(JsonXBMCCalls = "")
+AddCommand("XBMCSendMessage", "Send a message to XBMC server")
+XBMCSendMessage()
+	{
+		InputBox, message, "Enter message to send"
+		
+	}
+
 AddCommand("XBMCScanLibrary", "XBMC Scan Library for changes")
 XBMCScanLibrary()
 	{
 		;http://%xbmcuser%:%xbmcpass%@%xbmcIP%:%xbmcJSONPort%/jsonrpc ;if you have user and pass
 		JsonScanXbmc = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Scan\", \"id\": \"mybash\"}"
-		JsonRebootXbmc = "{\"jsonrpc\": \"2.0\", \"method\": \"System.Reboot\", \"id\": \"mybash\"}"
-		JsonCleanLibXbmc = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Clean\", \"id\": \"mybash\"}"
 		Run, %curl% -i -X POST -d %JsonScanXbmc% -H "content-type:application/json" http://%xbmcIP%:%xbmcJSONPort%/jsonrpc
 	}
 	

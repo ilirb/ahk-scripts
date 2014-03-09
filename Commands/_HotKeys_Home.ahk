@@ -11,7 +11,7 @@
 		Run, Rasdial vpn_name user pass
 	}
 	
-^+p::Run D:\Portable\PortableApps
+;^+p::Run D:\Portable\PortableApps
 
 ; uTorrent copy url into clipboard then add that torrent remotely
 ^!m::run, http://%UTORUSER%:%UTORPASS%@%uTorrentIP%:%uTorrentPort%/gui/?action=add-url&s=%Clipboard%

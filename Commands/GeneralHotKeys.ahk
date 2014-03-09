@@ -1,7 +1,7 @@
 ;==========================================================
 ; Use Alt+Left Mouse Button to move a window
 ;==========================================================
-Alt & LButton::
+Alt & MButton::
                 CoordMode, Mouse  ; Go by absolute coordinates
                 MouseGetPos, MouseStartX, MouseStartY, MouseWin ; Get the mouses' starting position within the window, as an anchor.
                 SetTimer, WatchMouse, 10 ; Track the mouse as it is dragged, and run the WatchMouse event every 10 ms.

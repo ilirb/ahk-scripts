@@ -5,6 +5,8 @@
 ; Alt key      !
 ; Shift key    +
 ; Windows key  # 
+#IfWinActive, Visual Studio
+return
 
 ; Open Console2 in current dir
 SetTitleMatchMode RegEx
