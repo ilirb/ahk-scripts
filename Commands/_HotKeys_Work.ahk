@@ -29,8 +29,8 @@
     {
 		Run C:\Users\ibi\Documents\Portable\PortableApps
 		return
-		
 	}
+	Run D:\Portable\PortableApps
 	return
 	
 ^#s::
