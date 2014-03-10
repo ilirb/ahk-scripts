@@ -66,3 +66,11 @@ Start VPN connection on the remote machine.
 * **LoopChromeTabs** - Go through all opened tabs and find a certain tab in Chrome.
 
 * **WakeOnLan** - Put all your machines in a list and wake 'em up remotely each one separately.
+
+Some useful commands
+--------------------
+
+Press `CapsLock`
+
+Type `IP` to get two options, get Local ip addresses and External ip address (also copying it in clipboard)
+
