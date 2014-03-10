@@ -33,13 +33,31 @@ PauseAHKScript()
 AddCommand("PCShutdown", "Turns the computer off")
 PCShutdown()
 {
-	run, shutdown.exe -s -t 00
+	Run, shutdown.exe -s -t 00
 }
 
 AddCommand("PCRestart", "Restarts the computer")
 PCRestart()
 {
-	run, shutdown.exe -r -t 00
+	Run, shutdown.exe -r -t 00
+}
+
+AddCommand("eMyComputer", "Explore My Computer")
+eMyComputer()
+{ 
+	Run, ::{20d04fe0-3aea-1069-a2d8-08002b30309d}  ; Opens the "My Computer" folder.
+}
+
+AddCommand("eRecycleBin", "Explore the Recycle Bin")
+eRecycleBin()
+{ 
+	Run, ::{645ff040-5081-101b-9f08-00aa002f954e}  ; Opens the Recycle Bin.
+}
+
+AddCommand("eC", "Explore C:\")
+eC()
+{
+	Run, explore C:\
 }
 
 AddCommand("OpenClipboard", "Opens whatever file/folder/url path is in the Clipboard, if it is valid")
@@ -65,10 +83,15 @@ OpenClipboard()
 		; Else this is not a file/folder path or a URL, so return error.
 		else
 		{
-			msg = PATH DOES NOT EXIST:`r`n %clipboardText%
-			return %msg%
+			return, "PATH DOES NOT EXIST:`r`n" . clipboardText
 		}
 	}
+}
+
+AddCommand("NewEmail", "Opens a new email in the default email program")
+NewEmail()
+{
+	Run, mailto:
 }
 
 AddCommand("WindowClose", "Closes the currently active window")
@@ -77,21 +100,20 @@ WindowClose()
 	WinClose, ahk_id %_cpActiveWindowID%
 }
 
-AddCommand("WindowCloseAll", "Closes all open windows")
+AddNamedCommand("WindowCloseAll", "CloseAllWindows", "Closes all open windows")
 CloseAllWindows()
 {
 	MatchList = AutoHotKey Help, Any Other Window Names To Leave Open
 
 	WinGet, ID, List, , , Program Manager
 	Loop, %ID%
-	   {
-		  StringTrimRight, This_ID, ID%A_Index%, 0
-		  WinGetTitle, This_Title, ahk_id %This_ID%
-		  If This_Title in %MatchList%
-			 Continue
-		  WinClose, %This_Title%
-	   }
-	Return	
+	{
+		StringTrimRight, This_ID, ID%A_Index%, 0
+		WinGetTitle, This_Title, ahk_id %This_ID%
+		If This_Title in %MatchList%
+			Continue
+		WinClose, %This_Title%
+	}
 }
 
 AddCommand("WindowMinimize", "Minimizes the currently active window")
@@ -106,16 +128,66 @@ WindowMaximize()
 	WinMaximize, ahk_id %_cpActiveWindowID%
 }
 
-AddCommand("WindowAlwaysOnTop", "Sets the window to always be on top of others")
+AddCommand("WindowAlwaysOnTop", "Sets the active window to always be on top of others")
 WindowAlwaysOnTop()
 {	global _cpActiveWindowID
 	WinSet, AlwaysOnTop, On, ahk_id %_cpActiveWindowID%
 }
 
-AddCommand("WindowNotAlwaysOnTop", "Sets the window to no longer always be on top of others")
+AddCommand("WindowNotAlwaysOnTop", "Sets the active window to no longer always be on top of others")
 WindowNotAlwaysOnTop()
 {	global _cpActiveWindowID
 	WinSet, AlwaysOnTop, Off, ahk_id %_cpActiveWindowID%
+}
+
+AddCommand("Outlook", "Opens Outlook making sure it is maximized")
+Outlook()
+{	
+	outlookExecutablePath := GetOutlookExecutablePath()
+	
+	; Look for Outlook 2013.
+	windowID := PutWindowInFocus("- Outlook", outlookExecutablePath . " /recycle", 2)
+	
+	; If not found, try looking for Outlook 2010.
+	if (windowID < 1)
+		windowID := PutWindowInFocus("Microsoft Outlook", outlookExecutablePath . " /recycle", 2)
+	
+	; If not found, try looking for any version of Outlook.
+	if (windowID < 1)
+		windowID := PutWindowInFocus("Outlook", outlookExecutablePath . " /recycle", 2)
+	
+	; If we have a handle to the Outlook window, make sure it is maximized.
+	if (windowID > 0)
+	{
+		; Maximize the window if it is not already maximized.
+		WinGet, maximized, MinMax, ahk_id %windowID%
+		if (maximized != 1)
+		{
+			WinMaximize, ahk_id %windowID%
+		}
+	}
+}
+
+AddCommand("OutlookAppointment", "Creates a new Appointment in Outlook")
+OutlookAppointment()
+{	
+	outlookExecutablePath := GetOutlookExecutablePath()
+	Run, "%outlookExecutablePath%" /recycle /c ipm.appointment
+}
+
+GetOutlookExecutablePath()
+{	global _Outlook2002ExecutablePath, _Outlook2003ExecutablePath, _Outlook2007ExecutablePath, _Outlook2010ExecutablePath, _Outlook2013ExecutablePath
+	IfExist, %_Outlook2002ExecutablePath%
+		outlookExecutablePath := _Outlook2002ExecutablePath
+	IfExist, %_Outlook2003ExecutablePath%
+		outlookExecutablePath := _Outlook2003ExecutablePath
+	IfExist, %_Outlook2007ExecutablePath%
+		outlookExecutablePath := _Outlook2007ExecutablePath
+	IfExist, %_Outlook2010ExecutablePath%
+		outlookExecutablePath := _Outlook2010ExecutablePath
+	IfExist, %_Outlook2013ExecutablePath%
+		outlookExecutablePath := _Outlook2013ExecutablePath
+	return %outlookExecutablePath%
 }
 
 AddCommand("ContextMenu", "Simulates a right-click by using Shift+F10")
@@ -183,7 +255,7 @@ MonitorOff()
 AddCommand("MuteSpeakersToggle", "Mutes/Un-mutes the volume on your computer")
 MuteSpeakersToggle()
 {
-	;SoundSet, +1, , mute	; Toggle volumne mute on and off.
+	;SoundSet, +1, , mute	; Toggle volume mute on and off.
 	SendInput, {Volume_Mute}
 }
 
@@ -211,10 +283,10 @@ MediaStop()
 	SendInput, {Media_Stop}
 }
 
-AddCommand("ShowClipboard", "Shows the text that is currently in the clipboard")
-ShowClipboard()
+AddCommand("ShowClipboardText", "Shows the text that is currently in the clipboard. Parameter specifies how many seconds before auto-closing it.", "3 seconds|3")
+ShowClipboardText(displayLengthInSeconds = 0)
 {
-	return "Clipboard contains: '" . Clipboard . "'"
+	MsgBox, , Clipboard Text (other content such as images are not shown here), %Clipboard%, %displayLengthInSeconds%
 }
 
 AddCommand("URLShortenAndPaste", "Replaces the long URL in the clipboard with a shortened one and pastes it")
