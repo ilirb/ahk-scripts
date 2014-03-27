@@ -267,7 +267,18 @@ WakeOnLan(WOLList = "")
 ;========================================================================================	
 ; XBMC Remote API using curl and JSON calls
 ; To be improved for supporting many API calls
-JsonMessage = "{\"jsonrpc\":\"2.0\",\"method\":\"GUI.ShowNotification\",\"params\":{\"title\":\"Message Title\",\"message\":\"Message Body\"},\"id\":1}"
+; http://wiki.xbmc.org/index.php?title=JSON-RPC_API/v6
+
+global JsonMessage
+global JsonCall
+
+; Create generic curl command to call
+XBMCSendCommand()
+{
+	JsonCall = %curl% -i -X POST -d %JsonMessage% -H "content-type:application/json" http://%xbmcIP%:%xbmcJSONPort%/jsonrpc
+	return
+}
+
 AddParameterToString(JsonXBMC, "Reboot|test")
 AddParameterToString(JsonXBMC, "Message|%JsonMessage%")
 
@@ -275,27 +286,36 @@ AddCommand("XBMCSendMessage", "Send a message to XBMC server")
 XBMCSendMessage()
 	{
 		InputBox, message, "Enter message to send"
-		
+		JsonMessage = "{\"jsonrpc\":\"2.0\",\"method\":\"GUI.ShowNotification\",\"params\":{\"title\":\"%A_ComputerName%\",\"message\":\"%message%\"},\"id\":1}"
+		XBMCSendCommand()
+		Run, %JsonCall%
+
+		; Need to figure out a way to wake up xbmc before sending a message, sending input wakes it but if it's on already it'll send an UP command
+		;JsonMessage = "{\"jsonrpc\":\"2.0\",\"method\":\"Input.Up\"}"
+		;XBMCSendCommand()
+		;Run, %JsonCall%
 	}
 
 AddCommand("XBMCScanLibrary", "XBMC Scan Library for changes")
 XBMCScanLibrary()
 	{
-		;http://%xbmcuser%:%xbmcpass%@%xbmcIP%:%xbmcJSONPort%/jsonrpc ;if you have user and pass
-		JsonScanXbmc = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Scan\", \"id\": \"mybash\"}"
-		Run, %curl% -i -X POST -d %JsonScanXbmc% -H "content-type:application/json" http://%xbmcIP%:%xbmcJSONPort%/jsonrpc
+		JsonMessage = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Scan\"}"
+		XBMCSendCommand()
+		Run, %JsonCall%
 	}
 	
 AddCommand("XBMCCleanLibrary", "XBMC Clean Library")
 XBMCCleanLibrary()
 	{
-		JsonCleanLibXbmc = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Clean\", \"id\": \"mybash\"}"
-		Run, %curl% -i -X POST -d %JsonCleanLibXbmc% -H "content-type:application/json" http://%xbmcIP%:%xbmcJSONPort%/jsonrpc
+		JsonMessage = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Clean\"}"
+		XBMCSendCommand()
+		Run, %JsonCall%
 	}
 	
 AddCommand("XBMCReboot", "XBMC Reboot")
 XBMCReboot()
 	{
-		JsonRebootXbmc = "{\"jsonrpc\": \"2.0\", \"method\": \"System.Reboot\", \"id\": \"mybash\"}"
-		Run, %curl% -i -X POST -d %JsonRebootXbmc% -H "content-type:application/json" http://%xbmcIP%:%xbmcJSONPort%/jsonrpc
+		JsonMessage = "{\"jsonrpc\": \"2.0\", \"method\": \"System.Reboot\"}"
+		XBMCSendCommand()
+		Run, %JsonCall%
 	}
