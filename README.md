@@ -21,25 +21,7 @@ Run AHKCommandPicker.ahk and activate it by pressing `Caps-Lock` (you are really
 
 In `Commands` folder all files with underscore are my additions you can check their content for more detail.
 
-For some functions like uTorrent and PSExec to work you need to create another ahk file one folder above the current folder (`..\Vars.ahk`)
-
-Example Vars.ahk:
-
-    ; uTorrent
-    global uTorrentIP := "192.168.1.1"
-    global uTorrentPort := "8080"
-    global uTorUser := "admin"
-    global uTorPass := "someutorrentpass"
-    
-    ; Tools & The Others
-    global SysInternals := "D:\Install\SysinternalsSuite"
-    global NirSoft := "D:\Install\NirLauncher\NirSoft"
-    global RemoteComputer := "192.168.1.1"
-    global PsExecUser := "windowsuser"
-    global PsExecPass := "windowsuserpassword"
-    global ConnectVPN := "Rasdial vpn_interface user password"
-    global CloseVPN := "Rasdial vpn_interface /DISCONNECT"
-    global MacList := "HomePc|00-11-22-33-44-55,RaspberryPi|00-11-22-33-44-55"
+For some functions like uTorrent, PSExec, Folder/App shortcuts copy Vars.ahk to one folder above the current folder (`..\Vars.ahk`) and adjust variables to your needs.
     
 For `EXE`'s just run them and you'll get a msgbox with instructions.
 
