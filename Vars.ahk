@@ -3,7 +3,8 @@ EnvGet, ProgFiles32, ProgramFiles(x86)
 if ProgFiles32 = ; Probably not on a 64-bit system.
 	EnvGet, ProgFiles32, ProgramFiles
 EnvGet, ProgFiles64, ProgramW6432
-;; Example eventghost := ProgFiles32 . "\EventGhost\EventGhost.exe -e"
+; Use ProgFiles32 var on any OS architecture x86/x64 to get to "Program Files x86" on x64 and "Program Files" on x86
+; Example eventghost := ProgFiles32 . "\EventGhost\EventGhost.exe -e"
 
 ; Computers - add as many as you like, remmember to define Folders also for each computer
 global workPC := "YOUR-WORK-COMPUTER-NAME"
@@ -11,7 +12,7 @@ global homePC := "YOUR-HOME-COMPUTER-NAME"
 ;global HomeServer := "YOUR-SERVER-COMPUTER-NAME"
 
 ; Folders
-global DropBox := A_ScriptDir . "\..\..\" ; use this is your AHK scripts reside in DropBox or enter an absolute path like "x:\PATH\TO\DROPBOX"
+global DropBox := A_ScriptDir . "\..\..\" ; use this is if this AHK script reside in DropBox or enter an absolute path like "x:\PATH\TO\DROPBOX"
 
 If A_ComputerName = %workPc%
     {
@@ -44,7 +45,7 @@ global myPush := A_ScriptDir . "\..\..\Pushover\myPush.exe" ; pushover
 global RemoteComputer := "IP-ADDRESS"
 global PsExecUser := "WINDOWS USER"
 global PsExecPass := "PASSWORD"
-global ConnectVPN := "Rasdial VPNNAME USERNAME PASSWORD"
+global ConnectVPN := "Rasdial VPNNAME USERNAME PASSWORD" ; VPNNAME is the name of the connection you create on Windows
 global CloseVPN := "Rasdial VPNNAME /DISCONNECT"
 global MacList := "HomePc|nn-nn-nn-nn-nn-nn,RaspberryPi|nn-nn-nn-nn-nn-nn"
 
