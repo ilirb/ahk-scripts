@@ -6,7 +6,7 @@ Different AHK scripts (also included in AHK Command Picker) and few compiled sta
 What's in here
 --------------
 
-AHK Command Picker - http://ahkcommandpicker.codeplex.com/
+AHK Command Picker 1.3.1 - http://ahkcommandpicker.codeplex.com/
 
 It's pretty much unmodified so i strongly recommend you to read doc @ http://ahkcommandpicker.codeplex.com/documentation to get you started on what AHK Command Picker is and how to use it.
 
