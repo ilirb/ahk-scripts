@@ -3,12 +3,8 @@
 ; Shift key    +
 ; Windows key  # 
 
-;~ ^!s::RUN \\selun-ibi\Shared
-;~ ^!x::RUN C:\Users\ibi\Downloads
-
-
 ^!o::
-    If A_ComputerName = SELUN-IBI1
+    If A_ComputerName = %workPc%
     {
 		Run \\qtfile3\onedrop
 		return
@@ -16,23 +12,9 @@
 	return
 
 ^!l::
-    If A_ComputerName = SELUN-IBI1
+    If A_ComputerName = %workPc%
     {
 		Run E:\TFS\Ver12.00\dev
 		return
 	}
-	return
-	
-#IfWinNotActive ahk_class PX_WINDOW_CLASS
-^+p::
-    If A_ComputerName = SELUN-IBI1
-    {
-		Run C:\Users\ibi\Documents\Portable\PortableApps
-		return
-	}
-	Run D:\Portable\PortableApps
-	return
-	
-^#s::
-	Run %PortableApps%\Sublime\sublime_text.exe
 	return

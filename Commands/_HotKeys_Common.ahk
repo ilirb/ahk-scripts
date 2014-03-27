@@ -1,10 +1,8 @@
-;#Include %A_ScriptDir%\_Functions.ahk
-;#Include Vars.ahk
-
 ; Control key  ^
 ; Alt key      !
 ; Shift key    +
 ; Windows key  # 
+
 #IfWinActive, Visual Studio
 return
 
@@ -60,3 +58,15 @@ SetTitleMatchMode RegEx
 		GoogleMusicControl("Right")
 		return
 	}
+
+
+; open PortableApps folder
+#IfWinNotActive ahk_class PX_WINDOW_CLASS
+^+p::
+	Run %PortableApps%
+	return
+
+; open Sublime Text
+^#s::
+	Run %PortableApps%\Sublime\sublime_text.exe
+	return

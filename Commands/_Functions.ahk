@@ -236,13 +236,13 @@ LoopChromeTabs(TabTitle)
 }
 
 ;========================================================================================
-AddCommand("IPAddrs", "Show all IP addresses")
+AddCommand("IPAddrs", "Show Local IP addresses")
 IPAddrs()
 	{
 		MsgBox, %A_IPAddress1%`n%A_IPAddress2%`n%A_IPAddress3%`n%A_IPAddress4%
 	}
 
-AddCommand("ExternalIP", "Show External IP Address")
+AddCommand("ExternalIP", "Show Public IP Address (clipboard)")
 ExternalIP()
 	{
 		UrlDownloadToFile, http://ip.ahk4.me/, %A_Temp%\ip.ahk4.me
@@ -252,36 +252,6 @@ ExternalIP()
 		Clipboard := ExtIP	
 	}
 
-AddCommand("Kitty", "Open Kitty")
-Kitty()
-	{
-		Run, D:\Portable\PortableApps\Kitty\kitty_portable.exe
-	}
-
-AddCommand("Pidgin", "Open Pidgin")
-Pidgin()
-	{
-		Run, D:\Portable\PortableApps\PidginPortable\PidginPortable.exe
-	}
-    
-AddCommand("Winscp", "Open Winscp")
-Winscp()
-	{
-		Run, D:\Portable\PortableApps\WinSCP\winscp422.exe
-	}
-	
-AddCommand("ProcExp", "Open Process Explorer from SysInternals")
-ProcExp()
-	{
-		
-		Run, %SysInternals%\procexp.exe
-	}
-
-AddCommand("FileZila", "Open FileZila")
-FileZila()
-	{
-		Run, D:\Portable\PortableApps\FileZillaPortable\FileZillaPortable.exe
-	}
 ;========================================================================================	
 ; Wake On Lan 
 ; MacList variable is defined in my ..\Vars.ahk files in the following format
