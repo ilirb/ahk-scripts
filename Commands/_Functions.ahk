@@ -178,40 +178,40 @@ PSexecWArgs()
 	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %Arguments% 
 }
 ;========================================================================================
-; WIP
-;
-; This is ugly, can we have some makeup?
+; Google Play Music simple remote control functions
+; A bit hacky but it works just fine so i don't think i will revise this, ever? Maybe.
+; Windows/Tab title variable for Google Play Music is in Vars.ahk GMusicTabTitle
+
 
 AddCommand("GoogleMusicControl", "Ctrl+Alt - Space for play/pause, Left for previous and Right for next")
 GoogleMusicControl(SendKey)
 {
 	Global TabTitleExist
-	TabTitle = Google Play Music
 	SetTitleMatchMode 2
-	IfWinExist, %TabTitle%
+	IfWinExist, %GMusicTabTitle%
 	{
-		WinActivate, %TabTitle%
+		WinActivate, %GMusicTabTitle%
   		Send {%SendKey%}
-		WinMinimize, %TabTitle%
+		WinMinimize, %GMusicTabTitle%
 		return
 	}
-	LoopChromeTabs(TabTitle)
+	LoopChromeTabs(GMusicTabTitle)
 	if (TabTitleExist = 1)
 	{
-		WinActivate, %TabTitle%
+		WinActivate, %GMusicTabTitle%
   		Send {%SendKey%}
-		WinMinimize, %TabTitle%
+		WinMinimize, %GMusicTabTitle%
 		return
 	}
 	return
 }
 
-LoopChromeTabs(TabTitle)
+LoopChromeTabs(GMusicTabTitle)
 {
 	Global TabTitleExist
 	IfWinExist, ahk_class Chrome_WidgetWin_1
 	{
-		; Get current open tab title
+		; Get first open tab title
 		WinGetTitle, FirstTitle
 		
 		; Go through all open tabs and find the tab we are looking for or quit
@@ -221,14 +221,14 @@ LoopChromeTabs(TabTitle)
 			Send ^{Tab}
 			WinGetTitle, CurrentTitle
 			
-			; After we changed tab have we found our tab?
-			IfWinExist, %TabTitle%
+			; After we changed tab, have we found our tab?
+			IfWinExist, %GMusicTabTitle%
 			{
 				TabTitleExist = 1
 				break
 			}
 			
-			; We went through all tabs and we should stop there
+			; We went through all tabs (because we are at the first ever tab) and we should stop looping
 			If (FirstTitle = CurrentTitle)
 				break
 		}
@@ -275,12 +275,9 @@ global JsonCall
 ; Create generic curl command to call
 XBMCSendCommand()
 {
-	JsonCall = %curl% -i -X POST -d %JsonMessage% -H "content-type:application/json" http://%xbmcIP%:%xbmcJSONPort%/jsonrpc
+	run, %curl% -i -X POST -d %JsonMessage% -H "content-type:application/json" http://%xbmcIP%:%xbmcJSONPort%/jsonrpc, , hide
 	return
 }
-
-AddParameterToString(JsonXBMC, "Reboot|test")
-AddParameterToString(JsonXBMC, "Message|%JsonMessage%")
 
 AddCommand("XBMCSendMessage", "Send a message to XBMC server")
 XBMCSendMessage()
@@ -288,12 +285,11 @@ XBMCSendMessage()
 		InputBox, message, "Enter message to send"
 		JsonMessage = "{\"jsonrpc\":\"2.0\",\"method\":\"GUI.ShowNotification\",\"params\":{\"title\":\"%A_ComputerName%\",\"message\":\"%message%\"},\"id\":1}"
 		XBMCSendCommand()
-		Run, %JsonCall%
+		;Run, %JsonCall%
 
 		; Need to figure out a way to wake up xbmc before sending a message, sending input wakes it but if it's on already it'll send an UP command
 		;JsonMessage = "{\"jsonrpc\":\"2.0\",\"method\":\"Input.Up\"}"
 		;XBMCSendCommand()
-		;Run, %JsonCall%
 	}
 
 AddCommand("XBMCScanLibrary", "XBMC Scan Library for changes")
@@ -301,7 +297,6 @@ XBMCScanLibrary()
 	{
 		JsonMessage = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Scan\"}"
 		XBMCSendCommand()
-		Run, %JsonCall%
 	}
 	
 AddCommand("XBMCCleanLibrary", "XBMC Clean Library")
@@ -309,7 +304,6 @@ XBMCCleanLibrary()
 	{
 		JsonMessage = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Clean\"}"
 		XBMCSendCommand()
-		Run, %JsonCall%
 	}
 	
 AddCommand("XBMCReboot", "XBMC Reboot")
@@ -317,5 +311,48 @@ XBMCReboot()
 	{
 		JsonMessage = "{\"jsonrpc\": \"2.0\", \"method\": \"System.Reboot\"}"
 		XBMCSendCommand()
-		Run, %JsonCall%
+	}
+
+
+;========================================================================================	
+; AutoRemote
+; Set AR_Target_Key the key to the device you want to send message to
+; Set AR_Message the message you want to send
+; blahhhhh
+
+
+AutoRemoteSend()
+	{
+		run, %curl% -k "%AR_URL%/sendmessage?key=%AR_TargetKey%&message=%AR_Message%", , hide
+		return
+	}
+
+AddCommand("AR_Server_VPNStatus", "AutoRemote VPN Status to HomeServer")
+AR_Server_VPNStatus()
+	{
+		AR_TargetKey = %ARkey_homeServer%
+		AR_Message := "AHK=:=VPNStatus"
+		AutoRemoteSend()
+		Return
+	}
+
+
+AddCommand("AR_Server_Custom", "AutoRemote send AHK=:= to HomeServer")
+AR_Server_Custom()
+	{
+		InputBox, args, "AHK=:=", , , , 120, , , , , "Enter only the command after =:="
+		AR_TargetKey = %ARkey_homeServer%
+		AR_Message := "AHK=:=" . args
+		AutoRemoteSend()
+		Return
+	}
+
+AddCommand("AR_Main_Custom", "AutoRemote send Dell=:= to HomePC")
+AR_Main_Custom()
+	{
+		InputBox, args, "Dell=:=", , , , 120, , , , , "Enter only the command after =:="
+		AR_TargetKey = %ARKey_Main%
+		AR_Message := "Dell=:=" . args
+		AutoRemoteSend()
+		Return
 	}

@@ -34,7 +34,7 @@ If A_ComputerName = %workPc%
 ;	}
 	else
 	{
-		MsgBox PortableApps and SysInternals are not defined for this computer %A_ComputerName% `n`nPlease edit %A_ScriptDir%\Vars.ahk
+		MsgBox PortableApps, SysInternals and NirSoft folders are not defined for this computer %A_ComputerName% `n`nPlease edit %A_ScriptDir%\Vars.ahk
 	}
 
 ; Tools
@@ -61,3 +61,13 @@ global xbmcuser := "" ; leave blank if you don't have username set on xbmc
 global xbmcpass := "" ; leave blank if you don't have password 
 global xbmcIP := "IPADDRESS-XBMC"
 global xbmcJSONPort := "PORT"
+
+; AutoRemote
+global AR_TargetKey, AR_Message
+global AR_URL := "https://autoremotejoaomgcd.appspot.com"
+global ARkey_homeServer := "PUT-YOUR-KEY-HERE"
+global ARKey_Main := "PUT-YOUR-KEY-HERE"
+
+
+; Other variables
+global GMusicTabTitle := "Google Play Music"
