@@ -23,10 +23,9 @@ OpenConsole2()
 
     IfInString full_path, \
     {
-		;Run, %A_WinDir%\system32\WindowsPowerShell\v1.0\powershell.exe -noexit -command "cd '%full_path%'"
-		; This will run a custom cmd called Console2 if you want to use the regular one use the 2nd line instead
-		IfExist, %A_WorkingDir%\..\..\Tools\Console-2.00b148-Beta_32bit\Console.exe
-			Run, %A_WorkingDir%\..\..\Tools\Console-2.00b148-Beta_32bit\Console.exe -d "%full_path%"
+		; Define you cmd console's path %CustomCMD% and its parameter %CustomCMD_args% in Vars.ahk 
+		IfExist, %CustomCMD%
+			Run, %CustomCMD% %CustomCMD_args% "%full_path%"
 		else
 			Run,  cmd /K cd /D "%full_path%"
     }

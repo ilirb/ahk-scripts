@@ -41,6 +41,10 @@ If A_ComputerName = %workPc%
 global curl := A_ScriptDir . "\..\..\Tools\curl32.exe"
 global myPush := A_ScriptDir . "\..\..\Pushover\myPush.exe" ; pushover
 
+; Custom CMD console
+global CustomCMD := A_ScriptDir . "\..\..\Tools\cmder\Cmder.exe" ; cmder
+global CustomCMD_args := "/start" ; cmder
+
 ; home server
 global RemoteComputer := "IP-ADDRESS"
 global PsExecUser := "WINDOWS USER"
@@ -67,7 +71,6 @@ global AR_TargetKey, AR_Message
 global AR_URL := "https://autoremotejoaomgcd.appspot.com"
 global ARkey_homeServer := "PUT-YOUR-KEY-HERE"
 global ARKey_Main := "PUT-YOUR-KEY-HERE"
-
 
 ; Other variables
 global GMusicTabTitle := "Google Play Music"
