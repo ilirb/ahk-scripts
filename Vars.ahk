@@ -43,7 +43,7 @@ global myPush := A_ScriptDir . "\..\..\Pushover\myPush.exe" ; pushover
 
 ; Custom CMD console
 global CustomCMD := A_ScriptDir . "\..\..\Tools\cmder\Cmder.exe" ; cmder
-global CustomCMD_args := "/start" ; cmder
+global CustomCMD_args := "/start" ; cmder open path argument 
 
 ; home server
 global RemoteComputer := "IP-ADDRESS"
