@@ -17,12 +17,12 @@ SetTitleMatchMode RegEx
         }
         else
         {
-            OpenConsole2()
+            OpenConsole()
             return
         }
 		
 	^+c::	
-		OpenConsole2()
+		OpenConsole()
 		return
 #IfWinActive
 

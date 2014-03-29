@@ -1,5 +1,11 @@
-AddCommand("OpenConsole2", "Open Console2 in Current Folder by pressing Win+C")
-OpenConsole2()
+;========================================================================================
+; Opens the command shell 'cmd' in the directory browsed in Explorer.
+; Note: expecting to be run when the active window is Explorer.
+; 
+; If you have defined a custom cmd console in Vars.ahk then it will use that otherwise it will use standard Windows CMD
+
+AddCommand("OpenConsole", "Open Console in Current Folder by pressing Win+C")
+OpenConsole()
 {
     ; This is required to get the full path of the file from the address bar
     WinGetText, full_path, A
@@ -7,13 +13,13 @@ OpenConsole2()
     ; Split on newline (`n)
     StringSplit, word_array, full_path, `n
 	Loop, %word_array0%
-	{
-		IfInString, word_array%A_Index%, Address
 		{
-			full_path := word_array%A_Index%
-			break
-		}
-	}   
+			IfInString, word_array%A_Index%, Address
+			{
+				full_path := word_array%A_Index%
+				break
+			}
+		}   
 
     ; strip to bare address
     full_path := RegExReplace(full_path, "^Address: ", "")
@@ -22,18 +28,18 @@ OpenConsole2()
     StringReplace, full_path, full_path, `r, , all
 
     IfInString full_path, \
-    {
-		; Define you cmd console's path %CustomCMD% and its parameter %CustomCMD_args% in Vars.ahk 
-		IfExist, %CustomCMD%
-			Run, %CustomCMD% %CustomCMD_args% "%full_path%"
-		else
-			Run,  cmd /K cd /D "%full_path%"
-    }
+	    {
+			; Define you cmd console's path %CustomCMD% and its parameter %CustomCMD_args% in Vars.ahk 
+			IfExist, %CustomCMD%
+				Run, %CustomCMD% %CustomCMD_args% "%full_path%"
+			else
+				Run,  cmd /K cd /D "%full_path%"
+	    }
     else
-    {
-        MsgBox Something went wrong, we couldn't figure out the path :O
-        Run, cmd /K cd /D "C:\ "
-    }
+	    {
+	        MsgBox Something went wrong, we couldn't figure out the path :O
+	        Run, cmd /K cd /D "C:\ "
+	    }
 }
 
 AddCommand("NewTextFile", "Creates a new text file in Current Folder by pressing Ctrl+Shift+T")
@@ -70,43 +76,6 @@ NewTextFile()
     }
 }
 
-;========================================================================================
-; Opens the command shell 'cmd' in the directory browsed in Explorer.
-; Note: expecting to be run when the active window is Explorer.
-;
-OpenCmdInCurrent()
-{
-    ; This is required to get the full path of the file from the address bar
-    WinGetText, full_path, A
-
-    ; Split on newline (`n)
-    StringSplit, word_array, full_path, `n
-    ; Take the first element from the array
-    	Loop, %word_array0%
-	{
-		IfInString, word_array%A_Index%, Address
-		{
-			full_path := word_array%A_Index%
-			break
-		}
-	}
-
-    ; strip to bare address
-    full_path := RegExReplace(full_path, "^Address: ", "")
-
-    ; Just in case - remove all carriage returns (`r)
-    StringReplace, full_path, full_path, `r, , all
-
-
-    IfInString full_path, \
-    {
-        Run,  cmd /K cd /D "%full_path%"
-    }
-    else
-    {
-        Run, cmd /K cd /D "C:\ "
-    }
-}
 ;========================================================================================
 ;uTorrent WebUI API
 ;
