@@ -236,10 +236,10 @@ WakeOnLan(WOLList = "")
 ;========================================================================================	
 ; Json functions 
 ;
-; Use CurlFormJson() if the following is desired "curl.exe -s -k -F "some=thing" -F "other=stuff" Url
+; Use CurlFormJson() if the following is desired "curl.exe -s -k -F "x=1x" -F "y=1y" Url
 ;	use this format to the message: JsonMessage := {x : 1x, y : 1y, z : 1z}
 ;
-; Use CurlDataJson() if the following is desired "curl.exe -i -X POST -d "{1:2,3:4}" -H "content-type:application/json" Url
+; Use CurlDataJson() if the following is desired "curl.exe -i -X POST -d "{x:1x,y:1y}" -H "content-type:application/json" Url
 ;	use this format: JsonMessage = {"x" : "1x", "y": "2y"}
 ;
 ; Always assign the message to variable "JsonMessage"
@@ -259,7 +259,6 @@ CurlDataJson()
 		
 		StringReplace, ParsedJsonMessage, JsonMessage, ", \", 1
 		Run, %curl% -i -X POST -d "%ParsedJsonMessage%" -H "content-type:application/json" %JsonURL%, , hide
-		Clipboard = %curl% -i -X POST -d "%ParsedJsonMessage%" -H "content-type:application/json" %JsonURL%
 		return
 	}
 
@@ -317,7 +316,6 @@ SendToXBMC()
 		CurlDataJson()
 		Return
 	}
-
 
 ;========================================================================================	
 ; AutoRemote
