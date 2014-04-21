@@ -39,7 +39,7 @@ If A_ComputerName = %workPc%
 
 ; Tools
 global curl := A_ScriptDir . "\..\..\Tools\curl32.exe"
-global myPush := A_ScriptDir . "\..\..\Pushover\myPush.exe" ; pushover
+global eventghost := ProgFiles32 . "\EventGhost\EventGhost.exe -e" ; send message to eventghost cmd
 
 ; Custom CMD console
 global CustomCMD := A_ScriptDir . "\..\..\Tools\cmder\Cmder.exe" ; cmder
@@ -65,6 +65,8 @@ global xbmcuser := "" ; leave blank if you don't have username set on xbmc
 global xbmcpass := "" ; leave blank if you don't have password 
 global xbmcIP := "IPADDRESS-XBMC"
 global xbmcJSONPort := "PORT"
+global xbmcRPC
+xbmcRPC = http://%xbmcIP%:%xbmcJSONPort%/jsonrpc
 
 ; AutoRemote
 global AR_TargetKey, AR_Message
@@ -74,3 +76,5 @@ global ARKey_Main := "PUT-YOUR-KEY-HERE"
 
 ; Other variables
 global GMusicTabTitle := "Google Play Music"
+global JsonURL
+global JsonMessage

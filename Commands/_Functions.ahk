@@ -232,53 +232,90 @@ WakeOnLan(WOLList = "")
 	Run, %NirSoft%\WakeMeOnLan.exe /wakeup %WOLList%
 	MsgBox Trying to wake: %WOLList%
 }
+
+;========================================================================================	
+; Json functions 
+;
+; Use CurlFormJson() if the following is desired "curl.exe -s -k -F "some=thing" -F "other=stuff" Url
+;	use this format to the message: JsonMessage := {x : 1x, y : 1y, z : 1z}
+;
+; Use CurlDataJson() if the following is desired "curl.exe -i -X POST -d "{1:2,3:4}" -H "content-type:application/json" Url
+;	use this format: JsonMessage = {"x" : "1x", "y": "2y"}
+;
+; Always assign the message to variable "JsonMessage"
+; Always assign the URL to variable "JsonURL"
+
+CurlFormJson()
+	{
+		FormString := ""
+		for k,v in JsonMessage
+			FormString .= (" -F ") . """" . k . "=" . v . """"
+		Run, %curl% -s -k %FormString% %JsonURL%, , hide
+		Return
+	}
+
+CurlDataJson()
+	{
+		
+		StringReplace, ParsedJsonMessage, JsonMessage, ", \", 1
+		Run, %curl% -i -X POST -d "%ParsedJsonMessage%" -H "content-type:application/json" %JsonURL%, , hide
+		Clipboard = %curl% -i -X POST -d "%ParsedJsonMessage%" -H "content-type:application/json" %JsonURL%
+		return
+	}
+
+;; This should probably go away
+;
+; CurlDataJson()
+; 	{
+; 		DataString := ""
+; 		for k,v in JsonMessage
+; 			DataString .= (" \""") . k . "\""" . ": " . "\""" . v . "\"","
+; 		StringTrimRight strout, DataString, 1
+; 		Run, %curl% -i -X POST -d "{ %strout% }" -H "content-type:application/json" %JsonURL%, , hide
+; 	}
+
 ;========================================================================================	
 ; XBMC Remote API using curl and JSON calls
 ; To be improved for supporting many API calls
 ; http://wiki.xbmc.org/index.php?title=JSON-RPC_API/v6
 
-global JsonMessage
-global JsonCall
-
-; Create generic curl command to call
-XBMCSendCommand()
-{
-	run, %curl% -i -X POST -d %JsonMessage% -H "content-type:application/json" http://%xbmcIP%:%xbmcJSONPort%/jsonrpc, , hide
-	return
-}
-
 AddCommand("XBMCSendMessage", "Send a message to XBMC server")
 XBMCSendMessage()
 	{
 		InputBox, message, "Enter message to send"
-		JsonMessage = "{\"jsonrpc\":\"2.0\",\"method\":\"GUI.ShowNotification\",\"params\":{\"title\":\"%A_ComputerName%\",\"message\":\"%message%\"},\"id\":1}"
-		XBMCSendCommand()
-		;Run, %JsonCall%
-
+		JsonMessage = {"jsonrpc" : "2.0", "method" : "GUI.ShowNotification", "params" : {"title" : "%A_ComputerName%" , "message" : "%message%" }, "id" : "1"}
 		; Need to figure out a way to wake up xbmc before sending a message, sending input wakes it but if it's on already it'll send an UP command
 		;JsonMessage = "{\"jsonrpc\":\"2.0\",\"method\":\"Input.Up\"}"
-		;XBMCSendCommand()
+
+		SendToXBMC()
 	}
 
 AddCommand("XBMCScanLibrary", "XBMC Scan Library for changes")
 XBMCScanLibrary()
 	{
-		JsonMessage = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Scan\"}"
-		XBMCSendCommand()
+		JsonMessage = {"jsonrpc" : "2.0", "method": "VideoLibrary.Scan"}
+		SendToXBMC()
 	}
 	
 AddCommand("XBMCCleanLibrary", "XBMC Clean Library")
 XBMCCleanLibrary()
 	{
-		JsonMessage = "{\"jsonrpc\": \"2.0\", \"method\": \"VideoLibrary.Clean\"}"
-		XBMCSendCommand()
+		JsonMessage = {"jsonrpc": "2.0", "method": "VideoLibrary.Clean"}
+		SendToXBMC()
 	}
 	
 AddCommand("XBMCReboot", "XBMC Reboot")
 XBMCReboot()
 	{
-		JsonMessage = "{\"jsonrpc\": \"2.0\", \"method\": \"System.Reboot\"}"
-		XBMCSendCommand()
+		JsonMessage = {"jsonrpc": "2.0", "method": "System.Reboot"}
+		SendToXBMC()
+	}
+
+SendToXBMC()
+	{
+		JsonURL := xbmcRPC
+		CurlDataJson()
+		Return
 	}
 
 
@@ -287,7 +324,6 @@ XBMCReboot()
 ; Set AR_Target_Key the key to the device you want to send message to
 ; Set AR_Message the message you want to send
 ; blahhhhh
-
 
 AutoRemoteSend()
 	{
@@ -322,5 +358,21 @@ AR_Main_Custom()
 		AR_TargetKey = %ARKey_Main%
 		AR_Message := "Dell=:=" . args
 		AutoRemoteSend()
+		Return
+	}
+
+;========================================================================================	
+; Pushover
+; Set AR_Target_Key the key to the device you want to send message to
+; Set AR_Message the message you want to send
+; blahhhhh
+
+AddCommand("SendMessagePushover", "Send a Pushover message to my HTCOne")
+SendMessagePushover()
+	{
+		JsonURL := PO_PushoverURL
+		InputBox, inputmessage, "Message to HTCOne", , , , 120, , , , , "Enter your message"
+		JsonMessage := {token : PO_Token, user : PO_User, message : inputmessage, device : PO_Device, title : AHK}
+		CurlFormJson()
 		Return
 	}
