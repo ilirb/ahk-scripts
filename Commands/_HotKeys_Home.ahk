@@ -1,5 +1,3 @@
-;#Include %A_ScriptDir%\Functions_Home.ahk
-
 ; Control key  ^
 ; Alt key      !
 ; Shift key    +

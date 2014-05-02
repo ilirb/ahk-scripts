@@ -49,7 +49,12 @@ Start VPN connection on the remote machine.
 
 * **WakeOnLan** - Put all your machines in a list and wake 'em up remotely each one separately.
 
-Some useful commands
+* **XBMC Remote** - Control your XBMC Media Center 
+
+* **AutoRemote, Pushover, Pushbullet** - Use these services to send messages to your devices.
+
+
+Shortcut tips
 --------------------
 
 * On Windows Explorer
