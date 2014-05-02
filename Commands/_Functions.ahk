@@ -273,17 +273,6 @@ CurlDataJson()
 		return
 	}
 
-;; This should probably go away
-;
-; CurlDataJson()
-; 	{
-; 		DataString := ""
-; 		for k,v in JsonMessage
-; 			DataString .= (" \""") . k . "\""" . ": " . "\""" . v . "\"","
-; 		StringTrimRight strout, DataString, 1
-; 		Run, %curl% -i -X POST -d "{ %strout% }" -H "content-type:application/json" %JsonURL%, , hide
-; 	}
-
 ;========================================================================================	
 ; XBMC Remote API using curl and JSON calls
 ; To be improved for supporting many API calls
@@ -325,7 +314,6 @@ SendToXBMC()
 	{
 		JsonURL := xbmcRPC
 		CurlDataJson()
-		Return
 	}
 
 ;========================================================================================	
@@ -337,7 +325,6 @@ SendToXBMC()
 AutoRemoteSend()
 	{
 		run, %curl% -k "%AR_URL%/sendmessage?key=%AR_TargetKey%&message=%AR_Message%", , hide
-		return
 	}
 
 AddCommand("AR_Server_VPNStatus", "AutoRemote VPN Status to HomeServer")
@@ -346,7 +333,6 @@ AR_Server_VPNStatus()
 		AR_TargetKey = %ARkey_homeServer%
 		AR_Message := "AHK=:=VPNStatus"
 		AutoRemoteSend()
-		Return
 	}
 
 
@@ -357,7 +343,6 @@ AR_Server_Custom()
 		AR_TargetKey = %ARkey_homeServer%
 		AR_Message := "AHK=:=" . args
 		AutoRemoteSend()
-		Return
 	}
 
 AddCommand("AR_Main_Custom", "AutoRemote send Dell=:= to HomePC")
@@ -367,7 +352,6 @@ AR_Main_Custom()
 		AR_TargetKey = %ARKey_Main%
 		AR_Message := "Dell=:=" . args
 		AutoRemoteSend()
-		Return
 	}
 
 ;========================================================================================	
@@ -383,7 +367,6 @@ SendMessagePushover()
 		InputBox, inputmessage, "Message to HTCOne", , , , 120, , , , , "Enter your message"
 		JsonMessage := {token : PO_Token, user : PO_User, message : inputmessage, device : PO_Device, title : AHK}
 		CurlFormJson()
-		Return
 	}
 
 ;========================================================================================	
@@ -400,5 +383,16 @@ PushBulletChrome()
 
 		JsonMessage := {"device_iden" : (PB_Device), "type": "note", "title" : "AHK" , "body" : (inputmessage)}
 		CurlFormJson()
-		Return
+	}
+
+AddCommand("PushBulletHTCOne", "Send a PushBullet message to HTC One")
+PushBulletHTCOne()
+	{
+		JsonURL := PB_PushUrl ; static
+		JsonUser := PB_Key ; static
+		PB_Device := PB_HTCOne ; change to desired device
+		InputBox, inputmessage, "Message to Chrome", , , , 120, , , , , "Enter your message"
+
+		JsonMessage := {"device_iden" : (PB_Device), "type": "note", "title" : "AHK" , "body" : (inputmessage)}
+		CurlFormJson()
 	}
