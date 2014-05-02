@@ -261,7 +261,7 @@ CurlFormJson()
 			SendJsonUser =
 
 		Run, %curl% -s -k %SendJsonUser% %FormString% %JsonURL%, , hide
-		Clipboard = %curl% -s -k %SendJsonUser% %FormString% %JsonURL%
+		;Clipboard = %curl% -s -k %SendJsonUser% %FormString% %JsonURL% ; Enable to debug cmd
 		Return
 	}
 
