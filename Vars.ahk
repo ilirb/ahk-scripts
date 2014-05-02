@@ -74,6 +74,13 @@ global AR_URL := "https://autoremotejoaomgcd.appspot.com"
 global ARkey_homeServer := "PUT-YOUR-KEY-HERE"
 global ARKey_Main := "PUT-YOUR-KEY-HERE"
 
+; PushBullet
+global PB_Key := "PUT-YOUR-KEY-HERE"
+global PB_PushUrl := "https://api.pushbullet.com/api/pushes"
+global PB_Chrome := "YOUR-DEVICE-ID"
+global PB_HTCOne := "YOUR-DEVICE-ID"
+global MessageTitle, MessageBody, JsonUser
+
 ; Other variables
 global GMusicTabTitle := "Google Play Music"
 global JsonURL

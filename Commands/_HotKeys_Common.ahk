@@ -21,10 +21,15 @@ SetTitleMatchMode RegEx
             return
         }
 		
-	^+c::	
+	^+c::
 		OpenConsole()
 		return
 #IfWinActive
+
+; open CMD on root
+^#c::
+	OpenConsole()
+	return
 
 ; Create new text file in current dir
 #IfWinActive ahk_class ExploreWClass|CabinetWClass

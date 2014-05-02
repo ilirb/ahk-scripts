@@ -52,7 +52,22 @@ Start VPN connection on the remote machine.
 Some useful commands
 --------------------
 
-Press `CapsLock`
+* On Windows Explorer
+
+`Win+C` open a CMD at the current path.
+
+`Ctrl+Shift+T` create new Text file in current folder, each time you press it will create new file.
+
+`Ctrl+Win+C` open CMD from everywhere, no need to be in Windows Explorer.
+
+* Google Play Music
+
+`Ctrl+Alt+Space` Pause/Unpause
+
+`Ctrl+Alt+RightKey` Next song
+
+`Ctrl+Alt+LeftKey` Previous song
+
+* Press `CapsLock`
 
 Type `IP` to get two options, get Local ip addresses and External ip address (also copying it in clipboard)
-

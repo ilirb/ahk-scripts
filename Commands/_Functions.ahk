@@ -37,8 +37,12 @@ OpenConsole()
 	    }
     else
 	    {
-	        MsgBox Something went wrong, we couldn't figure out the path :O
-	        Run, cmd /K cd /D "C:\ "
+	        ; MsgBox Something went wrong, we couldn't figure out the path :O
+	        IfExist, %CustomCMD%
+				Run, %CustomCMD% %CustomCMD_args% "C:\"
+			else
+				Run,  cmd /K cd /D "C:\"
+	        ; Run, cmd /K cd /D "C:\ "
 	    }
 }
 
@@ -250,7 +254,14 @@ CurlFormJson()
 		FormString := ""
 		for k,v in JsonMessage
 			FormString .= (" -F ") . """" . k . "=" . v . """"
-		Run, %curl% -s -k %FormString% %JsonURL%, , hide
+
+		if JsonUser
+			SendJsonUser = -u "%JsonUser%": 
+		else
+			SendJsonUser =
+
+		Run, %curl% -s -k %SendJsonUser% %FormString% %JsonURL%, , hide
+		Clipboard = %curl% -s -k %SendJsonUser% %FormString% %JsonURL%
 		Return
 	}
 
@@ -371,6 +382,23 @@ SendMessagePushover()
 		JsonURL := PO_PushoverURL
 		InputBox, inputmessage, "Message to HTCOne", , , , 120, , , , , "Enter your message"
 		JsonMessage := {token : PO_Token, user : PO_User, message : inputmessage, device : PO_Device, title : AHK}
+		CurlFormJson()
+		Return
+	}
+
+;========================================================================================	
+; PushBullet ; variables: PB_Key (api key), PB_PushUrl, PB_Device
+; Usually 
+
+AddCommand("PushBulletChrome", "Send a PushBullet message to chrome")
+PushBulletChrome()
+	{
+		JsonURL := PB_PushUrl ; static
+		JsonUser := PB_Key ; static
+		PB_Device := PB_Chrome ; change to desired device
+		InputBox, inputmessage, "Message to Chrome", , , , 120, , , , , "Enter your message"
+
+		JsonMessage := {"device_iden" : (PB_Device), "type": "note", "title" : "AHK" , "body" : (inputmessage)}
 		CurlFormJson()
 		Return
 	}
