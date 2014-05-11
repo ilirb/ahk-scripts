@@ -6,7 +6,10 @@
 #IfWinActive, Visual Studio
 return
 
-; Open Console2 in current dir
+; ==============================================
+; Hotkeys
+
+; Open Console2 in current dir, Win+C, or Ctrl+Shift+C
 SetTitleMatchMode RegEx
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
     #c::
@@ -26,23 +29,30 @@ SetTitleMatchMode RegEx
 		return
 #IfWinActive
 
-; open CMD on root
+; Open CMD on root, Ctrl+Win+C
 ^#c::
 	OpenConsole()
 	return
 
-; Create new text file in current dir
+; Create new text file in current dir, Ctrl+Shift+T
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
     ^+t::
 		NewTextFile()
 		return
 #IfWinActive
 
-; Open my Notes.txt
-^!n::Run, %A_WorkingDir%\..\..\Notes\notes.txt
+; Add Magnet link from clipboard to uTorrent
+^!m::
+	{ 
+		AR_Server_Clip2Magnet()
+		Return
+	}
 
-; Open DropBox folder
-^!d::RUN %A_WorkingDir%\..\..\
+; Open remote utorrent using Web UI
+^!u::run, %uTorrentGui%
+
+; ==============================================
+; Google Music control
 
 ; Google Music Play/Pause, Ctrl+Alt+Space
 ^!Space::
@@ -64,14 +74,31 @@ SetTitleMatchMode RegEx
 		return
 	}
 
+; ==============================================
+; Files and Folders
 
-; open PortableApps folder
+; Open my Notes.txt, Ctrl+Alt+N
+^!n::Run, %A_WorkingDir%\..\..\Notes\notes.txt
+
+; Open DropBox folder Ctrl+Alt+D
+^!d::RUN %A_WorkingDir%\..\..\
+
+; Open PortableApps folder
 #IfWinNotActive ahk_class PX_WINDOW_CLASS
 ^+p::
 	Run %PortableApps%
 	return
 
-; open Sublime Text
+; Open Sublime Text
 ^#s::
 	Run %PortableApps%\Sublime\sublime_text.exe
+	return
+
+; Open onedrop folder
+^!o::
+    If A_ComputerName = %workPc%
+    {
+		Run \\qtfile3\onedrop
+		return
+	}
 	return

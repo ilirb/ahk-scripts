@@ -12,27 +12,28 @@ global homePC := "YOUR-HOME-COMPUTER-NAME"
 ;global HomeServer := "YOUR-SERVER-COMPUTER-NAME"
 
 ; Folders
-global DropBox := A_ScriptDir . "\..\..\" ; use this is if this AHK script reside in DropBox or enter an absolute path like "x:\PATH\TO\DROPBOX"
+global DropBox, PortableApps, SysInternals, NirSoft
+DropBox := A_ScriptDir . "\..\..\" ; use this is if this AHK script reside in DropBox or enter an absolute path like "x:\PATH\TO\DROPBOX"
 
 If A_ComputerName = %workPc%
     {
-		global PortableApps := "X:\PATH\TO\PortableApps"
-		global SysInternals := "X:\PATH\TO\SysinternalsSuite"
-		global NirSoft := "X:\PATH\TO\NirSoft"
+		PortableApps := "X:\PATH\TO\PortableApps"
+		SysInternals := "X:\PATH\TO\SysinternalsSuite"
+		NirSoft := "X:\PATH\TO\NirSoft"
 	}
-	else if A_ComputerName = %homePC%
+else if A_ComputerName = %homePC%
 	{
-		global PortableApps := "X:\PATH\TO\PortableApps"
-		global SysInternals := "X:\PATH\TO\SysinternalsSuite"
-		global NirSoft := "X:\PATH\TO\NirSoft"
+		PortableApps := "X:\PATH\TO\PortableApps"
+		SysInternals := "X:\PATH\TO\SysinternalsSuite"
+		NirSoft := "X:\PATH\TO\NirSoft"
 	}
-;	else if A_ComputerName = %HomeServer%
+;else if A_ComputerName = %HomeServer%
 ;	{
-;		global PortableApps := "X:\PATH\TO\PortableApps"
-;		global SysInternals := "X:\PATH\TO\SysinternalsSuite"
-;		global NirSoft := "X:\PATH\TO\NirSoft"
+;		PortableApps := "X:\PATH\TO\PortableApps"
+;		SysInternals := "X:\PATH\TO\SysinternalsSuite"
+;		NirSoft := "X:\PATH\TO\NirSoft"
 ;	}
-	else
+else
 	{
 		MsgBox PortableApps, SysInternals and NirSoft folders are not defined for this computer %A_ComputerName% `n`nPlease edit %A_ScriptDir%\Vars.ahk
 	}
@@ -57,8 +58,10 @@ global MacList := "HomePc|nn-nn-nn-nn-nn-nn,RaspberryPi|nn-nn-nn-nn-nn-nn"
 global uTorrentIP := "IPADDRESS-TORRENT"
 global uTorrentPort := "PORT"
 global Magnet := "%Clipboard%"
-global uTorUser := "USER"
-global uTorPass := "PASSWORD"
+global uTorrentUser := "USER"
+global uTorrentPass := "PASSWORD"
+global uTorrentGui
+uTorrentGui = http://%uTorrentUser%:%uTorrentPass%@%uTorrentIP%:%uTorrentPort%/gui/
 
 ; xmbc
 global xbmcuser := "" ; leave blank if you don't have username set on xbmc
@@ -74,14 +77,20 @@ global AR_URL := "https://autoremotejoaomgcd.appspot.com"
 global ARkey_homeServer := "PUT-YOUR-KEY-HERE"
 global ARKey_Main := "PUT-YOUR-KEY-HERE"
 
+; Pushover
+global PO_PushoverURL := "https://api.pushover.net/1/messages.json"
+global PO_Token := "PUSHOVER-TOKEN"
+global PO_User := "PUSHOVER-USER"
+global PO_Device := "SOME-DEVICE"
+global PO_Message
+
 ; PushBullet
 global PB_Key := "PUT-YOUR-KEY-HERE"
 global PB_PushUrl := "https://api.pushbullet.com/api/pushes"
 global PB_Chrome := "YOUR-DEVICE-ID"
 global PB_HTCOne := "YOUR-DEVICE-ID"
-global MessageTitle, MessageBody, JsonUser
+global MessageTitle, MessageBody, JsonUser, PB_Device
 
 ; Other variables
 global GMusicTabTitle := "Google Play Music"
-global JsonURL
-global JsonMessage
+global JsonURL, JsonMessage

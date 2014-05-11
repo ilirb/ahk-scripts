@@ -126,29 +126,7 @@ uTorrentWebUI(ActionToPerform)
 	}
 	FileDelete, %A_ScriptDir%\list.txt
 }
-;========================================================================================
-AddCommand("ConnectVPNRemote", "Start VPN connection on remote computer - CTRL-Alt-V")
-ConnectVPNRemote()
-{
-	; Define these variables SysInternals, RemoteComputer, PsExecUser, PsExecPass, ConnectVPN
-	; ConnectVPN is a cmd: Rasdial vpn_name user pass
-	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %ConnectVPN% 
-}
 
-AddCommand("CloseVPNRemote", "Close VPN connection on remote computer")
-CloseVPNRemote()
-{
-	; Define these variables SysInternals, RemoteComputer, PsExecUser, PsExecPass, CloseVPN
-	; CloseVPN is a cmd: Rasdial vpn_name /DISCONNECT
-	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %CloseVPN% 
-}
-
-AddCommand("PSexecWArgs", "Enter argument to exec psexec on remote computer - CTRL-Alt-R")
-PSexecWArgs()
-{
-	InputBox, Arguments
-	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %Arguments% 
-}
 ;========================================================================================
 ; Google Play Music simple remote control functions
 ; A bit hacky but it works just fine so i don't think i will revise this, ever? Maybe.
@@ -207,36 +185,6 @@ LoopChromeTabs(GMusicTabTitle)
 	}
 }
 
-;========================================================================================
-AddCommand("IPAddrs", "Show Local IP addresses")
-IPAddrs()
-	{
-		MsgBox, %A_IPAddress1%`n%A_IPAddress2%`n%A_IPAddress3%`n%A_IPAddress4%
-	}
-
-AddCommand("ExternalIP", "Show Public IP Address (clipboard)")
-ExternalIP()
-	{
-		UrlDownloadToFile, http://ip.ahk4.me/, %A_Temp%\ip.ahk4.me
-		FileRead, ExtIP, %A_Temp%\ip.ahk4.me
-		MsgBox % ExtIP
-		FileDelete,%A_Temp%\ip.ahk4.me
-		Clipboard := ExtIP	
-	}
-
-;========================================================================================	
-; Wake On Lan 
-; MacList variable is defined in my ..\Vars.ahk files in the following format
-; HomePc|00-11-22-33-44-55,RaspberryPi|00-11-22-33-44-55
-; Requires WakeMeOnLan from NirSoft. Of course you can use another app just figure out the cmd parameters and change the function
-
-AddCommand("WakeOnLan", "Wake On Lan with parameters", MacList)
-WakeOnLan(WOLList = "")
-{
-	Run, %NirSoft%\WakeMeOnLan.exe /wakeup %WOLList%
-	MsgBox Trying to wake: %WOLList%
-}
-
 ;========================================================================================	
 ; Json functions 
 ;
@@ -261,138 +209,14 @@ CurlFormJson()
 			SendJsonUser =
 
 		Run, %curl% -s -k %SendJsonUser% %FormString% %JsonURL%, , hide
-		;Clipboard = %curl% -s -k %SendJsonUser% %FormString% %JsonURL% ; Enable to debug cmd
+		; Clipboard = %curl% -s -k %SendJsonUser% %FormString% %JsonURL% ; Enable to debug cmd
 		Return
 	}
 
 CurlDataJson()
 	{
-		
 		StringReplace, ParsedJsonMessage, JsonMessage, ", \", 1
 		Run, %curl% -i -X POST -d "%ParsedJsonMessage%" -H "content-type:application/json" %JsonURL%, , hide
+		; Clipboard = %curl% -i -X POST -d "%ParsedJsonMessage%" -H "content-type:application/json" %JsonURL% ; Enable to debug cmd
 		return
-	}
-
-;========================================================================================	
-; XBMC Remote API using curl and JSON calls
-; To be improved for supporting many API calls
-; http://wiki.xbmc.org/index.php?title=JSON-RPC_API/v6
-
-AddCommand("XBMCSendMessage", "Send a message to XBMC server")
-XBMCSendMessage()
-	{
-		InputBox, message, "Enter message to send"
-		JsonMessage = {"jsonrpc" : "2.0", "method" : "GUI.ShowNotification", "params" : {"title" : "%A_ComputerName%" , "message" : "%message%" }, "id" : "1"}
-		; Need to figure out a way to wake up xbmc before sending a message, sending input wakes it but if it's on already it'll send an UP command
-		;JsonMessage = "{\"jsonrpc\":\"2.0\",\"method\":\"Input.Up\"}"
-
-		SendToXBMC()
-	}
-
-AddCommand("XBMCScanLibrary", "XBMC Scan Library for changes")
-XBMCScanLibrary()
-	{
-		JsonMessage = {"jsonrpc" : "2.0", "method": "VideoLibrary.Scan"}
-		SendToXBMC()
-	}
-	
-AddCommand("XBMCCleanLibrary", "XBMC Clean Library")
-XBMCCleanLibrary()
-	{
-		JsonMessage = {"jsonrpc": "2.0", "method": "VideoLibrary.Clean"}
-		SendToXBMC()
-	}
-	
-AddCommand("XBMCReboot", "XBMC Reboot")
-XBMCReboot()
-	{
-		JsonMessage = {"jsonrpc": "2.0", "method": "System.Reboot"}
-		SendToXBMC()
-	}
-
-SendToXBMC()
-	{
-		JsonURL := xbmcRPC
-		CurlDataJson()
-	}
-
-;========================================================================================	
-; AutoRemote
-; Set AR_Target_Key the key to the device you want to send message to
-; Set AR_Message the message you want to send
-; blahhhhh
-
-AutoRemoteSend()
-	{
-		run, %curl% -k "%AR_URL%/sendmessage?key=%AR_TargetKey%&message=%AR_Message%", , hide
-	}
-
-AddCommand("AR_Server_VPNStatus", "AutoRemote VPN Status to HomeServer")
-AR_Server_VPNStatus()
-	{
-		AR_TargetKey = %ARkey_homeServer%
-		AR_Message := "AHK=:=VPNStatus"
-		AutoRemoteSend()
-	}
-
-
-AddCommand("AR_Server_Custom", "AutoRemote send AHK=:= to HomeServer")
-AR_Server_Custom()
-	{
-		InputBox, args, "AHK=:=", , , , 120, , , , , "Enter only the command after =:="
-		AR_TargetKey = %ARkey_homeServer%
-		AR_Message := "AHK=:=" . args
-		AutoRemoteSend()
-	}
-
-AddCommand("AR_Main_Custom", "AutoRemote send Dell=:= to HomePC")
-AR_Main_Custom()
-	{
-		InputBox, args, "Dell=:=", , , , 120, , , , , "Enter only the command after =:="
-		AR_TargetKey = %ARKey_Main%
-		AR_Message := "Dell=:=" . args
-		AutoRemoteSend()
-	}
-
-;========================================================================================	
-; Pushover
-; Set AR_Target_Key the key to the device you want to send message to
-; Set AR_Message the message you want to send
-; blahhhhh
-
-AddCommand("SendMessagePushover", "Send a Pushover message to my HTCOne")
-SendMessagePushover()
-	{
-		JsonURL := PO_PushoverURL
-		InputBox, inputmessage, "Message to HTCOne", , , , 120, , , , , "Enter your message"
-		JsonMessage := {token : PO_Token, user : PO_User, message : inputmessage, device : PO_Device, title : AHK}
-		CurlFormJson()
-	}
-
-;========================================================================================	
-; PushBullet ; variables: PB_Key (api key), PB_PushUrl, PB_Device
-; Usually 
-
-AddCommand("PushBulletChrome", "Send a PushBullet message to chrome")
-PushBulletChrome()
-	{
-		JsonURL := PB_PushUrl ; static
-		JsonUser := PB_Key ; static
-		PB_Device := PB_Chrome ; change to desired device
-		InputBox, inputmessage, "Message to Chrome", , , , 120, , , , , "Enter your message"
-
-		JsonMessage := {"device_iden" : (PB_Device), "type": "note", "title" : "AHK" , "body" : (inputmessage)}
-		CurlFormJson()
-	}
-
-AddCommand("PushBulletHTCOne", "Send a PushBullet message to HTC One")
-PushBulletHTCOne()
-	{
-		JsonURL := PB_PushUrl ; static
-		JsonUser := PB_Key ; static
-		PB_Device := PB_HTCOne ; change to desired device
-		InputBox, inputmessage, "Message to Chrome", , , , 120, , , , , "Enter your message"
-
-		JsonMessage := {"device_iden" : (PB_Device), "type": "note", "title" : "AHK" , "body" : (inputmessage)}
-		CurlFormJson()
 	}

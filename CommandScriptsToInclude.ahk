@@ -2,6 +2,8 @@
 ; Include our utility functions used by some of the Commands first.
 ;====================================================================
 #Include Commands\UtilityFunctions.ahk
+
+; CUSTOM INCLUDES
 #Include ..\Vars.ahk
 
 ;====================================================================
@@ -11,7 +13,10 @@
 ;====================================================================
 #Include Commands\DefaultCommands.ahk
 #Include Commands\MyCommands.ahk
+
+; CUSTOM INCLUDES
 #Include Commands\_Functions.ahk
+#Include Commands\_Commands.ahk
 
 ;====================================================================
 ; Include any files containing HotKeys/HotStrings last, as any AddCommand 
@@ -20,6 +25,5 @@
 ;====================================================================
 #Include Commands\DefaultHotkeys.ahk
 
-#Include Commands\_HotKeys_Common.ahk
-#Include Commands\_HotKeys_Work.ahk
-#Include Commands\_HotKeys_Home.ahk
+; CUSTOM INCLUDES
+#Include Commands\_HotKeys.ahk
