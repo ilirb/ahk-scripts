@@ -2,16 +2,24 @@
 AddCommand("IP_LocalAddrs", "Show Local IP addresses")
 IP_LocalAddrs()
 	{
+		EnvGet, UserDNSDomain, USERDNSDOMAIN
+		EnvGet, UserDomain, USERDOMAIN
 		Gui, 5:Default
-		Gui, Add, Text, x12 y10 w150 h20 , %A_IPAddress1%
-		Gui, Add, Text, x12 y40 w150 h20 , %A_IPAddress2%
-		Gui, Add, Text, x12 y70 w150 h20 , %A_IPAddress3%
-		Gui, Add, Text, x12 y100 w150 h20 , %A_IPAddress4%
-		Gui, Add, Button, x120 y10 w80 h20 gcopyIP1 , Copy
-		Gui, Add, Button, x120 y40 w80 h20 gcopyIP2 , Copy
-		Gui, Add, Button, x120 y70 w80 h20 gcopyIP3 , Copy
-		Gui, Add, Button, x120 y100 w80 h20 gcopyIP4 , Copy
-		Gui, Show, w220 h140, Local IP Addresses
+		Gui, Add, Text, , Computer Name: %A_ComputerName%
+		Gui, Add, Text, , UserName: %A_UserName%
+		Gui, Add, Text, , DNS Domain: %USERDNSDOMAIN%
+		Gui, Add, Text, , Domain: %USERDOMAIN%
+
+		Gui, Add, Text, y+20 x20 , %A_IPAddress1%
+		Gui, Add, Button, x+5 yp-5 gcopyIP1 , Copy
+		Gui, Add, Text, y+10 x20 , %A_IPAddress2%
+		Gui, Add, Button, x+5 yp-5 gcopyIP2 , Copy
+		Gui, Add, Text, y+10 x20 , %A_IPAddress3%
+		Gui, Add, Button, x+5 yp-5 gcopyIP3 , Copy
+		Gui, Add, Text, y+10 x20 , %A_IPAddress4%
+		Gui, Add, Button, x+5 yp-5 gcopyIP4 , Copy
+		
+		Gui, Show, w+300 , Local IP Addresses
 		return
 		 
 		copyIP1:
@@ -42,9 +50,13 @@ IP_LocalAddrs()
 		        Return
 		    }
 
-		    5GuiClose:  ; note the 2 before GuiClose
+		    5GuiClose: ; If X is pressed close the window ; note the 5 before GuiClose
 			Gui,5:destroy
 			return
+
+			5GuiEscape: ; If ESC is pressed close the window
+			Gui,5:Destroy
+			Return
 	}
 
 AddCommand("IP_Public", "Show Public IP Address and put it in clipboard")
@@ -185,6 +197,14 @@ AR_Server_Clip2Magnet()
 		AutoRemoteSend()
 	}
 
+AddCommand("AR_HTC_SendToClipboard", "Send current clipboard content to HTCOne's clipboard.")
+AR_HTC_SendToClipboard()
+	{
+		AR_TargetKey = %AR_i9100_key%
+		AR_Message := "clip=:=" . clipboard
+		AutoRemoteSend()
+	}
+
 ;========================================================================================	
 ; Pushover
 ; Set AR_Target_Key the key to the device you want to send message to
@@ -211,7 +231,7 @@ PushBulletCommon() ; Looks like PushBullet will be used more and more so, creati
 		CurlFormJson()
 	}
 
-AddCommand("PushBulletChrome", "Send a PushBullet message to chrome")
+AddCommand("PushBulletChrome", "Send a PushBullet message to Chrome")
 PushBulletChrome()
 	{
 		PB_Device := PB_Chrome ; change to desired device
