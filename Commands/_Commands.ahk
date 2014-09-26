@@ -64,9 +64,15 @@ IP_Public()
 	{
 		UrlDownloadToFile, http://ip.ahk4.me/, %A_Temp%\ip.ahk4.me
 		FileRead, ExtIP, %A_Temp%\ip.ahk4.me
-		MsgBox % ExtIP
+		MsgBox % "PublicIP: " ExtIP
 		FileDelete,%A_Temp%\ip.ahk4.me
 		Clipboard := ExtIP	
+	}
+
+AddCommand("Sleep", "Suspends the computer, Sleep.")
+Sleep()
+	{
+		DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
 	}
 
 ;========================================================================================	
@@ -145,6 +151,13 @@ XBMCReboot()
 		SendToXBMC()
 	}
 
+AddCommand("XBMCInputBack", "XBMC send Back input")
+XBMCInputBack()
+	{
+		JsonMessage = {"jsonrpc": "2.0", "method": "Input.Back"}
+		SendToXBMC()
+	}
+	
 SendToXBMC()
 	{
 		JsonURL := xbmcRPC
@@ -179,8 +192,17 @@ AR_Server_Custom()
 		AutoRemoteSend()
 	}
 
-AddCommand("AR_Main_Custom", "AutoRemote send Dell=:= to HomePC")
-AR_Main_Custom()
+AddCommand("AR_Server_Clip2Magnet", "Send Magnet link from clipboard to Home Server.")
+AR_Server_Clip2Magnet()
+	{
+		; Info: EventGhost is listening on home server using AutoRemote through Chrome so i can send links from anywhere.
+		AR_TargetKey = %ARkey_homeServer%
+		AR_Message := "torrent=:=" . clipboard
+		AutoRemoteSend()
+	}
+
+AddCommand("AR_Dell_Custom", "AutoRemote send Dell=:= to HomePC")
+AR_Dell_Custom()
 	{
 		InputBox, args, "Dell=:=", , , , 120, , , , , "Enter only the command after =:="
 		AR_TargetKey = %ARKey_Main%
@@ -188,12 +210,12 @@ AR_Main_Custom()
 		AutoRemoteSend()
 	}
 
-AddCommand("AR_Server_Clip2Magnet", "Send Magnet link from clipboard to Home Server.")
-AR_Server_Clip2Magnet()
+AddCommand("AR_Selun_Custom", "AutoRemote send selun=:= to Lenovo")
+AR_Selun_Custom()
 	{
-		; Info: EventGhost is listening on home server using AutoRemote through Chrome so i can send links from anywhere.
-		AR_TargetKey = %ARkey_homeServer%
-		AR_Message := "torrent=:=" . clipboard
+		InputBox, args, "selun=:=", , , , 120, , , , , "Enter only the command after =:="
+		AR_TargetKey = %ARKey_Main%
+		AR_Message := "selun=:=" . args
 		AutoRemoteSend()
 	}
 

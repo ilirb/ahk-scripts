@@ -35,7 +35,7 @@ Will open CMD in the current folder opened in Windows Explorer.
 * **NewTextFile** - 
 You like build-in `Ctrl+Shift+N` to create a new folder in Windows 7? Use `Ctrl+Shift+T` to create a new text file in current folder.
 
-* **uTorrentWebUI** - 
+* **uTorrentWebUI** -
 Remote control uTorrent running in another machine. Stop, start, pause, unpause, etc...
 
 * **ConnectVPNRemote** - 
@@ -44,6 +44,8 @@ Start VPN connection on the remote machine.
 * **PSExecWArgs** - Execute commands in remote computer using PSExec using dialog input.
 
 * **GoogleMusicControl** - Simple Google Play Music control start, pause, next, previous. (Opened in Chrome only, for now)
+
+* **SpotifyMusicControl** - Simple Spotify control start, pause, next, previous.
 
 * **LoopChromeTabs** - Go through all opened tabs and find a certain tab in Chrome.
 
@@ -65,7 +67,9 @@ Shortcut tips
 
 `Ctrl+Win+C` open CMD from everywhere, no need to be in Windows Explorer.
 
-* Google Play Music
+* Google Play Music and/or Spotify
+
+(If Play Music is not running when you press the hotkey, it will start automatically :)
 
 `Ctrl+Alt+Space` Pause/Unpause
 

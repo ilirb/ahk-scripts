@@ -1,7 +1,7 @@
 ; Control key  ^
 ; Alt key      !
 ; Shift key    +
-; Windows key  # 
+; Windows key  #
 
 #IfWinActive, Visual Studio
 return
@@ -9,9 +9,13 @@ return
 ; ==============================================
 ; Hotkeys
 
+
 ; Open Console2 in current dir, Win+C, or Ctrl+Shift+C
 SetTitleMatchMode RegEx
-#IfWinActive ahk_class ExploreWClass|CabinetWClass
+; GroupAdd, CMDClassGroup, ahk_class CabinetWClass
+; GroupAdd, CMDClassGroup, ahk_class Progman
+; #IfWinActive ahk_group CMDClassGroup 
+#if WinActive("ahk_class CabinetWClass") Or WinActive("ahk_class Progman")
     #c::
         If A_OSVersion in WIN_8
         {
@@ -23,7 +27,7 @@ SetTitleMatchMode RegEx
             OpenConsole()
             return
         }
-		
+
 	^+c::
 		OpenConsole()
 		return
@@ -43,7 +47,7 @@ SetTitleMatchMode RegEx
 
 ; Add Magnet link from clipboard to uTorrent
 ^!m::
-	{ 
+	{
 		AR_Server_Clip2Magnet()
 		Return
 	}
@@ -52,25 +56,34 @@ SetTitleMatchMode RegEx
 ^!u::run, %uTorrentGui%
 
 ; ==============================================
-; Google Music control
+; Google Music control/Spotify
 
 ; Google Music Play/Pause, Ctrl+Alt+Space
 ^!Space::
 	{
-		GoogleMusicControl("Space")
+		If WinExist("ahk_class SpotifyMainWindow") 
+			SpotifyMusicControl("Space")
+		Else
+			GoogleMusicControl("Space")
 		return
 	}
 ; Google Music Previous song, Ctrl+Alt+Left
 ^!Left::
 	{
-		GoogleMusicControl("Left")
+		If WinExist("ahk_class SpotifyMainWindow") 
+			SpotifyMusicControl("Left")
+		Else
+			GoogleMusicControl("Left")
 		return
 	}
-	
+
 ; Google Music Next song, Ctrl+Alt+Right
 ^!Right::
 	{
-		GoogleMusicControl("Right")
+		If WinExist("ahk_class SpotifyMainWindow") 
+			SpotifyMusicControl("Right")
+		Else
+			GoogleMusicControl("Right")
 		return
 	}
 
@@ -84,10 +97,11 @@ SetTitleMatchMode RegEx
 ^!d::RUN %A_WorkingDir%\..\..\
 
 ; Open PortableApps folder
-#IfWinNotActive ahk_class PX_WINDOW_CLASS
+#If !(WinActive("ahk_exe atom.exe") Or WinActive("ahk_exe sublime_text.exe"))
 ^+p::
 	Run %PortableApps%
 	return
+#If
 
 ; Open Sublime Text
 ^#s::

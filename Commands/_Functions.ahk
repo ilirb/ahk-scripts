@@ -1,11 +1,9 @@
 ;========================================================================================
-; Opens the command shell 'cmd' in the directory browsed in Explorer.
-; Note: expecting to be run when the active window is Explorer.
-; 
-; If you have defined a custom cmd console in Vars.ahk then it will use that otherwise it will use standard Windows CMD
+; Functions to run against a folder opened in Windows Explorer
+; full_path - is the variable returned with the full path
 
-AddCommand("OpenConsole", "Open Console in Current Folder by pressing Win+C")
-OpenConsole()
+global full_path
+GetFullPath() ; Use this function to get the Absolute path of a folder opened in Windows Explorer
 {
     ; This is required to get the full path of the file from the address bar
     WinGetText, full_path, A
@@ -28,6 +26,24 @@ OpenConsole()
     StringReplace, full_path, full_path, `r, , all
 
     IfInString full_path, \
+		{
+			return full_path
+		}
+	else
+		{
+			full_path =
+			return full_path
+		}
+}
+
+; Opens the command shell 'cmd' in the directory browsed in Explorer.
+; Note: expecting to be run when the active window is Explorer.
+; If you have defined a custom cmd console in Vars.ahk then it will use that otherwise it will use standard Windows CMD
+AddCommand("OpenConsole", "Open Console in Current Folder by pressing Win+C")
+OpenConsole()
+{
+	GetFullPath()
+    If full_path
 	    {
 			; Define you cmd console's path %CustomCMD% and its parameter %CustomCMD_args% in Vars.ahk 
 			IfExist, %CustomCMD%
@@ -35,6 +51,13 @@ OpenConsole()
 			else
 				Run,  cmd /K cd /D "%full_path%"
 	    }
+	else if (WinActive("ahk_class Progman"))
+		{
+			IfExist, %CustomCMD%
+				Run, %CustomCMD% %CustomCMD_args% "%A_Desktop%"
+			else
+				Run,  cmd /K cd /D "%A_Desktop%"
+		}
     else
 	    {
 	        ; MsgBox Something went wrong, we couldn't figure out the path :O
@@ -49,20 +72,8 @@ OpenConsole()
 AddCommand("NewTextFile", "Creates a new text file in Current Folder by pressing Ctrl+Shift+T")
 NewTextFile()
 {
-    WinGetText, full_path, A
-    StringSplit, word_array, full_path, `n
-    Loop, %word_array0%
-	{
-		IfInString, word_array%A_Index%, Address
-		{
-			full_path := word_array%A_Index%
-			break
-		}
-	} 
-    full_path := RegExReplace(full_path, "^Address: ", "")
-    StringReplace, full_path, full_path, `r, , all
-    
-    IfInString full_path, \
+	GetFullPath()
+    If full_path
     {
         NoFile = 0
         Loop
@@ -98,7 +109,7 @@ uTorrentWebUI(ActionToPerform)
 {
 	; Define these variables uTorUser, uTorPass, uTorrentIP, uTorrentPort
 	; Get list of torrents
-	URLDownloadToFile, http://%uTorUser%:%uTorPass%@%uTorrentIP%:%uTorrentPort%/gui/?list=1, %A_ScriptDir%\list.txt
+	URLDownloadToFile, %uTorrentGui%/?list=1, %A_ScriptDir%\list.txt
 	
 	; Parse the text file to get all torrents and perform desired action against all torrents
 	Loop, read, %A_ScriptDir%\list.txt
@@ -120,11 +131,18 @@ uTorrentWebUI(ActionToPerform)
 			Length := StrLen(TorrentHash)
 			If Length = 40
 			{
-				Run, http://%uTorUser%:%uTorPass%@%uTorrentIP%:%uTorrentPort%/gui/?action=%ActionToPerform%&hash=%TorrentHash%
+				Run, %uTorrentGui%/?action=%ActionToPerform%&hash=%TorrentHash%
 			}
 		}
 	}
 	FileDelete, %A_ScriptDir%\list.txt
+}
+
+uTorrentMagnet(magnetURL)
+{
+	;TODO set labels
+	Run, %uTorrentGui%/?action=add-url&s=%magnetURL%
+
 }
 
 ;========================================================================================
@@ -153,6 +171,8 @@ GoogleMusicControl(SendKey)
 		WinMinimize, %GMusicTabTitle%
 		return
 	}
+	; Open the Google Play music if it's not running.
+	run, "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"  --profile-directory=Default --app-id=icppfcnhkcmnfdhfhphakoifcfokfdhg
 	return
 }
 
@@ -183,6 +203,24 @@ LoopChromeTabs(GMusicTabTitle)
 				break
 		}
 	}
+}
+
+;========================================================================================	
+;Spotify simple Controls
+
+SpotifyMusicControl(SendKey)
+{
+	DetectHiddenWindows, On 
+	If SendKey = Space
+		{
+			ControlSend, ahk_parent, {Space}, ahk_class SpotifyMainWindow
+		}
+	Else
+		{
+			ControlSend, ahk_parent, ^{%SendKey%}, ahk_class SpotifyMainWindow
+		}
+	DetectHiddenWindows, Off 
+	return
 }
 
 ;========================================================================================	
