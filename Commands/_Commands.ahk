@@ -114,6 +114,12 @@ PSexecWArgs()
 	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %Arguments% 
 }
 
+AddCommand("ProcessExplorer", "Start SysInternals Process Explorer in admin")
+ProcessExplorer()
+{
+	Run, %SysInternals%\procexp.exe /e 
+}
+
 ;========================================================================================	
 ; XBMC Remote API using curl and JSON calls
 ; To be improved for supporting many API calls

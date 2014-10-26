@@ -150,9 +150,25 @@ DummyCommand(parameters = "")
 ;==========================================================
 ; Hotkey to launch the Command Picker window.
 ;==========================================================
-CapsLock::
-	SetCapslockState, Off				; Turn CapsLock off after it was pressed
-	CPLaunchCommandPicker()	
+;CapsLock::
+;	SetCapslockState, Off				; Turn CapsLock off after it was pressed
+;	CPLaunchCommandPicker()	
+;return
+
+~CapsLock::
+if (A_PriorHotkey <> "~CapsLock" or A_TimeSincePriorHotkey > 400)
+{
+    ; Too much time between presses, so this isn't a double-press.
+    KeyWait, CapsLock
+    return
+}
+else 
+{
+	; SetCapslockState, Off				; Turn CapsLock off after it was pressed
+	CPLaunchCommandPicker()
+	SetCapslockState, Off
+	return
+}
 return
 
 ;==========================================================
