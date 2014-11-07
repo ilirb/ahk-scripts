@@ -18,34 +18,34 @@ IP_LocalAddrs()
 		Gui, Add, Button, x+5 yp-5 gcopyIP3 , Copy
 		Gui, Add, Text, y+10 x20 , %A_IPAddress4%
 		Gui, Add, Button, x+5 yp-5 gcopyIP4 , Copy
-		
+
 		Gui, Show, w+300 , Local IP Addresses
 		return
-		 
+
 		copyIP1:
-		    { 
-		        Clipboard = %A_IPAddress1% 
+		    {
+		        Clipboard = %A_IPAddress1%
 		        gui, 5:Destroy
 		        Return
-		    } 
-		    
+		    }
+
 		copyIP2:
-		    { 
-		        Clipboard = %A_IPAddress2% 
+		    {
+		        Clipboard = %A_IPAddress2%
 		        gui, 5:Destroy
 		        Return
-		    } 
-		    
+		    }
+
 		copyIP3:
-		    { 
-		        Clipboard = %A_IPAddress3% 
+		    {
+		        Clipboard = %A_IPAddress3%
 		        gui, 5:Destroy
 		        Return
-		    } 
-		    
+		    }
+
 		copyIP4:
-		    { 
-		        Clipboard = %A_IPAddress4% 
+		    {
+		        Clipboard = %A_IPAddress4%
 		        gui, 5:Destroy
 		        Return
 		    }
@@ -66,7 +66,7 @@ IP_Public()
 		FileRead, ExtIP, %A_Temp%\ip.ahk4.me
 		MsgBox % "PublicIP: " ExtIP
 		FileDelete,%A_Temp%\ip.ahk4.me
-		Clipboard := ExtIP	
+		Clipboard := ExtIP
 	}
 
 AddCommand("Sleep", "Suspends the computer, Sleep.")
@@ -75,8 +75,8 @@ Sleep()
 		DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
 	}
 
-;========================================================================================	
-; Wake On Lan 
+;========================================================================================
+; Wake On Lan
 ; MacList variable is defined in my ..\Vars.ahk files in the following format
 ; HomePc|00-11-22-33-44-55,RaspberryPi|00-11-22-33-44-55
 ; Requires WakeMeOnLan from NirSoft. Of course you can use another app just figure out the cmd parameters and change the function
@@ -88,39 +88,24 @@ WakeOnLan(WOLList = "")
 	MsgBox Trying to wake: %WOLList%
 }
 
-;========================================================================================	
+;========================================================================================
 ; PSExec commands
 
-AddCommand("ConnectVPNRemote", "Start VPN connection on remote computer - CTRL-Alt-V")
-ConnectVPNRemote()
-{
-	; Define these variables SysInternals, RemoteComputer, PsExecUser, PsExecPass, ConnectVPN
-	; ConnectVPN is a cmd: Rasdial vpn_name user pass
-	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %ConnectVPN% 
-}
-
-AddCommand("CloseVPNRemote", "Close VPN connection on remote computer")
-CloseVPNRemote()
-{
-	; Define these variables SysInternals, RemoteComputer, PsExecUser, PsExecPass, CloseVPN
-	; CloseVPN is a cmd: Rasdial vpn_name /DISCONNECT
-	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %CloseVPN% 
-}
-
+; Need to make it more interactive and general. Accept computername, user, pass, arguments.
 AddCommand("PSexecWArgs", "Enter argument to exec psexec on remote computer - CTRL-Alt-R")
 PSexecWArgs()
 {
 	InputBox, Arguments
-	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %Arguments% 
+	RunWait, %SysInternals%\psexec.exe \\%RemoteComputer% -u %PsExecUser% -p %PsExecPass% cmd /C %Arguments%
 }
 
 AddCommand("ProcessExplorer", "Start SysInternals Process Explorer in admin")
 ProcessExplorer()
 {
-	Run, %SysInternals%\procexp.exe /e 
+	Run, %SysInternals%\procexp.exe /e
 }
 
-;========================================================================================	
+;========================================================================================
 ; XBMC Remote API using curl and JSON calls
 ; To be improved for supporting many API calls
 ; http://wiki.xbmc.org/index.php?title=JSON-RPC_API/v6
@@ -142,14 +127,14 @@ XBMCScanLibrary()
 		JsonMessage = {"jsonrpc" : "2.0", "method": "VideoLibrary.Scan"}
 		SendToXBMC()
 	}
-	
+
 AddCommand("XBMCCleanLibrary", "XBMC Clean Library")
 XBMCCleanLibrary()
 	{
 		JsonMessage = {"jsonrpc": "2.0", "method": "VideoLibrary.Clean"}
 		SendToXBMC()
 	}
-	
+
 AddCommand("XBMCReboot", "XBMC Reboot")
 XBMCReboot()
 	{
@@ -163,14 +148,14 @@ XBMCInputBack()
 		JsonMessage = {"jsonrpc": "2.0", "method": "Input.Back"}
 		SendToXBMC()
 	}
-	
+
 SendToXBMC()
 	{
 		JsonURL := xbmcRPC
 		CurlDataJson()
 	}
 
-;========================================================================================	
+;========================================================================================
 ; AutoRemote
 ; Set AR_Target_Key the key to the device you want to send message to
 ; Set AR_Message the message you want to send
@@ -233,7 +218,7 @@ AR_HTC_SendToClipboard()
 		AutoRemoteSend()
 	}
 
-;========================================================================================	
+;========================================================================================
 ; Pushover
 ; Set AR_Target_Key the key to the device you want to send message to
 ; Set AR_Message the message you want to send
@@ -248,9 +233,9 @@ PushoverHTC()
 		CurlFormJson()
 	}
 
-;========================================================================================	
+;========================================================================================
 ; PushBullet ; variables: PB_Key (api key), PB_PushUrl, PB_Device
-; Usually 
+; Usually
 
 PushBulletCommon() ; Looks like PushBullet will be used more and more so, creating a common function to set common url, user key and run curl
 	{

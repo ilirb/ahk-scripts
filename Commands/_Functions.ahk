@@ -17,7 +17,7 @@ GetFullPath() ; Use this function to get the Absolute path of a folder opened in
 				full_path := word_array%A_Index%
 				break
 			}
-		}   
+		}
 
     ; strip to bare address
     full_path := RegExReplace(full_path, "^Address: ", "")
@@ -45,7 +45,7 @@ OpenConsole()
 	GetFullPath()
     If full_path
 	    {
-			; Define you cmd console's path %CustomCMD% and its parameter %CustomCMD_args% in Vars.ahk 
+			; Define you cmd console's path %CustomCMD% and its parameter %CustomCMD_args% in Vars.ahk
 			IfExist, %CustomCMD%
 				Run, %CustomCMD% %CustomCMD_args% "%full_path%"
 			else
@@ -85,13 +85,11 @@ NewTextFile()
         }
         FileAppend, ,%full_path%\NewTextFile%NoFile%.txt
     }
-    else
-    {
-        return
-    }
+    else return
 }
 
 ;========================================================================================
+;OLD AND PROBABLY BROKEN
 ;uTorrent WebUI API
 ;
 ;set a variable Action to stop, start, pause, unpause, etc then call this functions
@@ -100,7 +98,7 @@ NewTextFile()
 ;
 ;~ ^+q::
 ;~ {
-	;~ ; send parameters to function like stop, start, pause, unpause, etc 
+	;~ ; send parameters to function like stop, start, pause, unpause, etc
 	;~ uTorrentWebUI("stop")
 	;~ return
 ;~ }
@@ -110,23 +108,23 @@ uTorrentWebUI(ActionToPerform)
 	; Define these variables uTorUser, uTorPass, uTorrentIP, uTorrentPort
 	; Get list of torrents
 	URLDownloadToFile, %uTorrentGui%/?list=1, %A_ScriptDir%\list.txt
-	
+
 	; Parse the text file to get all torrents and perform desired action against all torrents
 	Loop, read, %A_ScriptDir%\list.txt
 	{
 		; Find the lines that start with [
 		Line1 = [
 		StringLeft, HashLine, A_LoopReadLine, 1
-		
+
 		If HashLine = %Line1%
 		{
 			; Split the line using the comma separator
 			StringSplit, Hash, A_LoopReadLine, `,
-			
+
 			; Strip [" from the beggining and " at the end of the hash
 			StringTrimLeft, HL, Hash1, 2
 			StringTrimRight, TorrentHash, HL, 1
-			
+
 			; Hashes are 40 chars long adjust if neccessary
 			Length := StrLen(TorrentHash)
 			If Length = 40
@@ -183,21 +181,21 @@ LoopChromeTabs(GMusicTabTitle)
 	{
 		; Get first open tab title
 		WinGetTitle, FirstTitle
-		
+
 		; Go through all open tabs and find the tab we are looking for or quit
 		Loop
 		{
 			WinActivate ahk_class Chrome_WidgetWin_1
 			Send ^{Tab}
 			WinGetTitle, CurrentTitle
-			
+
 			; After we changed tab, have we found our tab?
 			IfWinExist, %GMusicTabTitle%
 			{
 				TabTitleExist = 1
 				break
 			}
-			
+
 			; We went through all tabs (because we are at the first ever tab) and we should stop looping
 			If (FirstTitle = CurrentTitle)
 				break
@@ -205,12 +203,12 @@ LoopChromeTabs(GMusicTabTitle)
 	}
 }
 
-;========================================================================================	
+;========================================================================================
 ;Spotify simple Controls
 
 SpotifyMusicControl(SendKey)
 {
-	DetectHiddenWindows, On 
+	DetectHiddenWindows, On
 	If SendKey = Space
 		{
 			ControlSend, ahk_parent, {Space}, ahk_class SpotifyMainWindow
@@ -219,12 +217,12 @@ SpotifyMusicControl(SendKey)
 		{
 			ControlSend, ahk_parent, ^{%SendKey%}, ahk_class SpotifyMainWindow
 		}
-	DetectHiddenWindows, Off 
+	DetectHiddenWindows, Off
 	return
 }
 
-;========================================================================================	
-; Json functions 
+;========================================================================================
+; Json functions
 ;
 ; Use CurlFormJson() if the following is desired "curl.exe -s -k -F "x=1x" -F "y=1y" Url
 ;	use this format to the message: JsonMessage := {x : 1x, y : 1y, z : 1z}
@@ -242,7 +240,7 @@ CurlFormJson()
 			FormString .= (" -F ") . """" . k . "=" . v . """"
 
 		if JsonUser
-			SendJsonUser = -u "%JsonUser%": 
+			SendJsonUser = -u "%JsonUser%":
 		else
 			SendJsonUser =
 
