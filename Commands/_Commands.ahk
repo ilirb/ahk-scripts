@@ -105,6 +105,14 @@ ProcessExplorer()
 	Run, %SysInternals%\procexp.exe /e
 }
 
+AddCommand("CMDAdmin", "Start CMD elevated in current dir")
+CMDAdmin()
+{
+	GetFullPath()
+	;Run, %NirSoft%\nircmd\nircmdc.exe elevate cmd /k cd /D "%full_path%", , hide
+	Run, %NirSoft%\nircmd\nircmdc.exe elevate %CustomCMD% %CustomCMD_args% "%full_path%", , hide
+}
+
 ;========================================================================================
 ; XBMC Remote API using curl and JSON calls
 ; To be improved for supporting many API calls
@@ -205,7 +213,7 @@ AddCommand("AR_Selun_Custom", "AutoRemote send selun=:= to Lenovo")
 AR_Selun_Custom()
 	{
 		InputBox, args, "selun=:=", , , , 120, , , , , "Enter only the command after =:="
-		AR_TargetKey = %ARKey_Main%
+		AR_TargetKey = %ARKey_selun%
 		AR_Message := "selun=:=" . args
 		AutoRemoteSend()
 	}
@@ -257,6 +265,24 @@ AddCommand("PushBulletHTCOne", "Send a PushBullet message to HTC One")
 PushBulletHTCOne()
 	{
 		PB_Device := PB_HTCOne ; change to desired device
+		InputBox, inputmessage, "Message to Chrome", , , , 120, , , , , "Enter your message"
+		JsonMessage := {"device_iden" : (PB_Device), "type": "note", "title" : "AHK" , "body" : (inputmessage)}
+		PushBulletCommon()
+	}
+
+AddCommand("PushBulletHPServer", "Send a PushBullet message to HP Server")
+PushBulletHPServer()
+	{
+		PB_Device := PB_HPServer
+		InputBox, inputmessage, "Message to Chrome", , , , 120, , , , , "Enter your message"
+		JsonMessage := {"device_iden" : (PB_Device), "type": "note", "title" : "AHK" , "body" : (inputmessage)}
+		PushBulletCommon()
+	}
+
+AddCommand("PushBulletLenovo", "Send a PushBullet message to Lenovo laptop")
+PushBulletLenovo()
+	{
+		PB_Device := PB_Selunibi1
 		InputBox, inputmessage, "Message to Chrome", , , , 120, , , , , "Enter your message"
 		JsonMessage := {"device_iden" : (PB_Device), "type": "note", "title" : "AHK" , "body" : (inputmessage)}
 		PushBulletCommon()

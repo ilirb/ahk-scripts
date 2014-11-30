@@ -40,13 +40,20 @@ SetTitleMatchMode RegEx
     ^+t::
 		NewTextFile()
 		return
+
+    ^!a::
+    {
+      GetFullPath()
+      run, atom.exe "%full_path%", , hide
+      return
+    }
 #IfWinActive
 
 ; ==============================================
 ; Google Music control/Spotify
 
 ; Google Music Play/Pause, Ctrl+Alt+Space
-#If !(WinActive("ahk_exe atom.exe") Or WinActive("ahk_exe sublime_text.exe") Or WinActive("ahk_exe devenv.exe"))
+;~ #If !(WinActive("ahk_exe atom.exe") Or WinActive("ahk_exe sublime_text.exe") Or WinActive("ahk_exe devenv.exe"))
 ^!Space::
 	{
 		If WinExist("ahk_class SpotifyMainWindow")
@@ -74,7 +81,7 @@ SetTitleMatchMode RegEx
 			GoogleMusicControl("Right")
 		return
 	}
-#If
+;~ #If
 
 ; ==============================================
 ; Files and Folders
@@ -100,7 +107,7 @@ SetTitleMatchMode RegEx
 ^!o::
   If A_ComputerName = %workPc%
 	{
-		Run \\qtfile3\onedrop
+		Run \\rd-file\onedrop\
 		return
 	}
 	return
