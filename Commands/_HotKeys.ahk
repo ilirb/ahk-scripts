@@ -28,7 +28,7 @@ SetTitleMatchMode RegEx
 	^+c::
 		OpenConsole()
 		return
-		
+
 	^+t:: ; Create new text file in current dir, Ctrl+Shift+T
 		NewTextFile()
 		return
@@ -39,14 +39,14 @@ SetTitleMatchMode RegEx
 	OpenConsole()
 	return
 
-#IfWinActive ahk_class ExploreWClass|CabinetWClass
+/*#IfWinActive ahk_class ExploreWClass|CabinetWClass
     ^!a::
     {
       GetFullPath()
       run, atom "%full_path%", , hide
       return
     }
-#IfWinActive
+#IfWinActive*/
 
 ; ==============================================
 ; Google Music control/Spotify
