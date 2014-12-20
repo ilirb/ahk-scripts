@@ -157,6 +157,31 @@ XBMCInputBack()
 		SendToXBMC()
 	}
 
+AddCommand("XBMCOpenURL", "XBMC open url")
+XBMCOpenURL()
+{
+	InputBox, url, "Enter url to send"
+	JsonMessage = { "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "file": "%url%" }}, "id": 1 }
+	SendToXBMC()
+}
+
+AddCommand("XBMCOpenSopCast", "XBMC open SopCast or AceStream")
+XBMCOpenSopCast()
+{
+	LocalIP = 192.168.1.
+	Loop, 4
+	{
+		IPAddr := A_IPAddress%A_Index%
+		IfInString, IPAddr, %LocalIP%
+		{
+			url = http://%IPAddr%:8902/tv.asf
+			JsonMessage = { "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "file": "%url%" }}, "id": 1 }
+			SendToXBMC()
+		}
+	}
+	return
+}
+
 SendToXBMC()
 	{
 		JsonURL := xbmcRPC
@@ -283,6 +308,15 @@ AddCommand("PushBulletLenovo", "Send a PushBullet message to Lenovo laptop")
 PushBulletLenovo()
 	{
 		PB_Device := PB_Selunibi1
+		InputBox, inputmessage, "Message to Chrome", , , , 120, , , , , "Enter your message"
+		JsonMessage := {"device_iden" : (PB_Device), "type": "note", "title" : "AHK" , "body" : (inputmessage)}
+		PushBulletCommon()
+	}
+
+AddCommand("PushBulletHomePC", "Send a PushBullet message to Home PC")
+PushBulletHomePC()
+	{
+		PB_Device := PB_HomePC
 		InputBox, inputmessage, "Message to Chrome", , , , 120, , , , , "Enter your message"
 		JsonMessage := {"device_iden" : (PB_Device), "type": "note", "title" : "AHK" , "body" : (inputmessage)}
 		PushBulletCommon()

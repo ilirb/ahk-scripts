@@ -28,6 +28,10 @@ SetTitleMatchMode RegEx
 	^+c::
 		OpenConsole()
 		return
+		
+	^+t:: ; Create new text file in current dir, Ctrl+Shift+T
+		NewTextFile()
+		return
 #If
 
 ; Open CMD on root, Ctrl+Win+C
@@ -35,16 +39,11 @@ SetTitleMatchMode RegEx
 	OpenConsole()
 	return
 
-; Create new text file in current dir, Ctrl+Shift+T
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
-    ^+t::
-		NewTextFile()
-		return
-
     ^!a::
     {
       GetFullPath()
-      run, atom.exe "%full_path%", , hide
+      run, atom "%full_path%", , hide
       return
     }
 #IfWinActive

@@ -29,6 +29,17 @@ GetFullPath() ; Use this function to get the Absolute path of a folder opened in
 		{
 			return full_path
 		}
+	else if (WinActive("ahk_class Progman"))
+		{
+			full_path = %A_Desktop%
+			return full_path
+		}
+	else if full_path = Downloads
+		{
+			EnvGet, UserProfile, UserProfile
+			full_path = %UserProfile%\Downloads
+      return full_path
+		}
 	else
 		{
 			full_path =
@@ -51,13 +62,6 @@ OpenConsole()
 			else
 				Run,  cmd /K cd /D "%full_path%"
 	    }
-	else if (WinActive("ahk_class Progman"))
-		{
-			IfExist, %CustomCMD%
-				Run, %CustomCMD% %CustomCMD_args% "%A_Desktop%"
-			else
-				Run,  cmd /K cd /D "%A_Desktop%"
-		}
     else
 	    {
 	        ; MsgBox Something went wrong, we couldn't figure out the path :O
@@ -73,19 +77,19 @@ AddCommand("NewTextFile", "Creates a new text file in Current Folder by pressing
 NewTextFile()
 {
 	GetFullPath()
-    If full_path
-    {
-        NoFile = 0
-        Loop
-        {
-            IfExist  %full_path%\NewTextFile%NoFile%.txt
-                    NoFile++
-                else
-                    break
-        }
-        FileAppend, ,%full_path%\NewTextFile%NoFile%.txt
-    }
-    else return
+	If full_path
+	{
+		NoFile = 0
+		Loop
+			{
+				IfExist  %full_path%\NewTextFile%NoFile%.txt
+					NoFile++
+				else
+					break
+			}
+		FileAppend, ,%full_path%\NewTextFile%NoFile%.txt
+	}
+  else return
 }
 
 ;========================================================================================
